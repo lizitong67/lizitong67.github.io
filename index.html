@@ -1,159 +1,16 @@
-<!DOCTYPE html><html lang="zh-CN"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="计算机硕士在读"><meta name="keywords" content=""><meta name="author" content="Alston"><meta name="copyright" content="Alston"><title>When you collect everything, you understand nothing. | Alston's blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="计算机硕士在读"><meta name="keywords" content=""><meta name="author" content="Alston"><meta name="copyright" content="Alston"><title>When you collect everything, you understand nothing. | Alston's blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
   root: '/',
   algolia: undefined,
-  localSearch: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
   copy: {
-    success: 'Copy successfully',
-    error: 'Copy error',
-    noSupport: 'The browser does not support'
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
   }
-} </script><meta name="generator" content="Hexo 4.2.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="false"><div class="author-info"><div class="author-info__avatar text-center"><img src="/img/avatar.png"></div><div class="author-info__name text-center">Alston</div><div class="author-info__description text-center">计算机硕士在读</div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">1</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">1</span></a></div></div></div><nav class="no-bg" id="nav"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Alston's blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"></span></div><div id="site-info"><div id="site-title">Alston's blog</div><div id="site-sub-title">When you collect everything, you understand nothing.</div></div></nav><div id="content-outer"><div class="layout" id="content-inner"><div class="recent-post-item article-container"><a class="article-title" href="/2020/02/03/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%8E%E5%AE%89%E5%85%A8%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">《机器学习与安全》读书笔记</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-02-03</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/%E5%AE%89%E5%85%A8%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/">安全数据科学</a></span><div class="content"><p>我看的是《Machine Learning and Security》的翻译版，原书应该是安全数据科学领域一本比较不错的而且较为基础的书，奈何翻译的太差而且本人水平有限，对书中的许多内容了解的不多，而且书中的代码部分并没有自己亲自实现，只是选取了安全领域的异常检测、恶意软件分析和网络流量分析三个部分做了笔记。希望在学习一段时间之后，能够对之前不了解的内容有所掌握，并且实现一下书中的实战部分。另外如果再读此书的话，一定要读英文版。</p>
-<h1 id="1-异常检测"><a href="#1-异常检测" class="headerlink" title="1 异常检测"></a>1 异常检测</h1><p>（1）AI for security分为两类：模式识别和异常检测</p>
-<ul>
-<li>模式识别：发现数据中的特性，将其提炼成特征集</li>
-<li>异常检测：建立一个描述正常状态的特征，所有偏离该状态的情况都被视为异常 </li>
-</ul>
-<p>（2）shell命令可以形成一个时间序列，因此可以从时间序列分析的角度进行异常检测</p>
-<p>（3）主机入侵检测</p>
-<ul>
-<li>工具框架：osquery（收集低层级OS Metics，可以使用基于SQL的接口进行查询）、Linux auditd</li>
-<li>可以利用第三方工具将上述两种工具集成到自动化业务流程框架中，如：Chef、Puppet、 Ansible、SaltStack、Kolide、doorman</li>
-<li>Indicator Of Compromise</li>
-</ul>
-<p>（4）网络入侵检测</p>
-<ul>
-<li>流量分析工具：tcpdump、Bro、Snort</li>
-<li>检测单位是流量</li>
-<li>提取网络流量元数据<ul>
-<li>基于状态数据包检测（stateful packet inspection，SPI）</li>
-<li>工作在3、4层</li>
-<li>检查数据包的头尾而不触及数据包上下文</li>
-<li>保持先前收到的数据包的状态、从而能够将新接收到的数据包与先前的相关联</li>
-</ul>
-</li>
-<li>检查网络流量内容<ul>
-<li>深度包检测（Deep packet inspection、DPI）</li>
-<li>工作在应用层</li>
-<li>Bro（可以检测HTTP请求POST的字符串，从而可以检测SQL注入和XSS）</li>
-<li>如果要在使用了TLS/SSL加密的环境中进行检测，只能在监测点取消加密</li>
-</ul>
-</li>
-</ul>
-<p>（5）Web应用程序入侵检测</p>
-<ul>
-<li>标准Web服务器以NCSA通用日志格式来生成日志</li>
-</ul>
-<p>（6）异常检测方法——预测（监督学习）</p>
-<ul>
-<li>适用于一维实值度量序列</li>
-<li>思想：将预测与观测之间的偏差视为异常</li>
-<li>ARIMA (autoregressive integrated moving average，自回归积分移动平均模型)，通过使用正常的数据集，由序列与以前时间点自身之间的相关性（autocorrelation，自相关），来预测接下来的时间段内的状态。在预测相对准确的情况下（预测结果与实际观测到的非异常状态拟合度较高），如果观测值与预测结果之间的差值超过了某个threshold，则认为发生了异常。</li>
-<li>人工神经网络（Particularly，长短期记忆网络（long short-term memory，LSTM））</li>
-<li>注意：预测适合novelty detection（训练集中不包含异常数据），而不适合outlier detection（离群点检测，训练集中包含异常数据）。即适合训练集中没有异常数据，如果训练集包含异常数据的话，容易造成在训练过程中对预测数据的过拟合，从而使观测到的异常状态与预测值之间的差值变小，异常检测效果下降。</li>
-</ul>
-<p>（7）统计度量</p>
-<ul>
-<li>绝对中位差（median absolute deviation，MAD）：去查找一群数据中的离群值，表示为数列中位数的绝对偏差的中位数<br>import numpy as np<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="comment"># Input data series</span></span><br><span class="line">x = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br><span class="line"><span class="comment"># Calculate median absolute deviation</span></span><br><span class="line">mad = np.median(np.abs(x - np.median(x)))</span><br><span class="line"><span class="comment"># MAD of x is 1.5</span></span><br></pre></td></tr></table></figure></li>
-<li>Grubbs的离群值检测</li>
-<li>Goodness-of-fit——椭圆包络拟合（Elliptic envelope itting (covariance estimate itting)）</li>
-</ul>
-<p>（8）异常检测方法——无监督学习</p>
-<ul>
-<li>单类支持向量机</li>
-<li>孤立森林<ul>
-<li>随机森林非常适合高维数据的异常检测，适合时间序列数据的实时异常检测</li>
-<li>思想：异常数据和正常数据相比，可以用较少的次数将其与正常数据分隔开</li>
-</ul>
-</li>
-<li>K均值</li>
-</ul>
-<p>（9）异常检测方法——基于密度的方法</p>
-<ul>
-<li>KNN</li>
-<li>局部离群因子（Local outlier factor，LOF）</li>
-</ul>
-<p>（10）入侵检测面临的问题</p>
-<ul>
-<li>错误代价高</li>
-<li>语义鸿沟</li>
-<li>可解释性</li>
-</ul>
-<h1 id="2-恶意软件分析"><a href="#2-恶意软件分析" class="headerlink" title="2 恶意软件分析"></a>2 恶意软件分析</h1><p>（1）恶意软件类别划分依据：family</p>
-<p>（2）可以用静态签名匹配来判断是否是恶意软件</p>
-<p>（3）使用机器学习进行恶意软件分类的优势</p>
-<ul>
-<li>模糊匹配：给出了两个实体之间的相似程度，而不是简单的yes or no</li>
-<li>自动特征加权和选择</li>
-<li>适应性：适应不断变化的输入，跟踪恶意软件的进化</li>
-</ul>
-<p>（4）使用机器学习进行恶意软件分类的挑战：特征工程</p>
-<p>（5）二进制可执行文件的特征生成：</p>
-<ul>
-<li>静态方法：<ul>
-<li>结构分析：查看程序的文件构成</li>
-<li>静态分析：查看程序的代码</li>
-</ul>
-</li>
-<li>动态分析：运行程序分析（沙箱）<ul>
-<li>调试</li>
-<li>动态插桩：通过挂钩正在运行的进程，并将自定义逻辑注入到应用程序中，从而修改应用程序或环境的运行时行为<br>可用做特征的指标：</li>
-</ul>
-</li>
-</ul>
-<p>（6）程序请求权限</p>
-<ul>
-<li>系统调用</li>
-<li>操作码n-gram（一个包含其它特征的序列）</li>
-<li>网络行为</li>
-<li>logcat</li>
-</ul>
-<p>（7）特征选择：</p>
-<ul>
-<li>单变量分析：迭代地对每个单独特征进行分析，在只考虑该特征的情况下，模型执行会有多好；从而可以得到对特征好坏的评估</li>
-<li>递归特征消除：从完整的特征集开始，分析特征的排除对模型情况的影响</li>
-<li>潜在特征值表示：奇异值分解（SVD）、主成分分析（PCA）</li>
-<li>特定模型中通过特征权重减小或消除某些特征对模型的影响</li>
-</ul>
-<h1 id="3-网络流量分析"><a href="#3-网络流量分析" class="headerlink" title="3 网络流量分析"></a>3 网络流量分析</h1><p>（1）无监督特征学习：指的是从原始数据自动生成特征，不同于无监督学习</p>
-<p>（2）TSL/SSL数据包可以被解密</p>
-<p>（3）攻击分为被动攻击和主动攻击</p>
-<ul>
-<li>被动攻击：不会启动与网络中节点的通信，也不会与网络数据交互或修- 改网络数据；而是进行信息收集和侦察活动。</li>
-<li>主动攻击<ul>
-<li>漏洞：用过远程服务器发送的命令，可以使用基于机器学习模糊匹配来检测</li>
-<li>欺骗：DNS欺骗、ARP欺骗</li>
-<li>横向移动</li>
-<li>拒绝服务</li>
-</ul>
-</li>
-</ul>
-<p>（4）C&amp;C服务器控制僵尸网络，C&amp;C服务器的体系结构如下：</p>
-<ul>
-<li>星形/集中式网络    </li>
-<li>多重网络：解决了a中的单点故障、可以缓和物理距离带来的问题</li>
-<li>分层网络：为了解决指令必须集中发布的问题</li>
-<li>随机P2P网络：僵尸网络管理员可以向僵尸网络中的任何一个节点发布指令，然后指令在网络中以多点传送的方式进行传播</li>
-</ul>
-<p>（4）使用NSLKDD数据金构建网络攻击分类预测模型</p>
-<ul>
-<li>数据由TCPDump产生有标记的数据集，包含38种攻击类型，只有24种在训练集中出现，攻击属于下面四大类：<ul>
-<li>dos：拒绝服务</li>
-<li>r2l：来自远程服务器的未授权的访问</li>
-<li>u2r：提权尝试</li>
-<li>probe：探测性暴力破解攻击</li>
-</ul>
-</li>
-<li>我们的任务是设计一个通用的分类器，将数据分为五类：4类攻击+良性</li>
-<li>类不平衡问题：训练集中属于r2l和u2l的数据占比非常少，因此在测试集中对这两类数据的分类效果极差，由于训练集中benign数据占比最大，因此这两类数据大部分都被预测为benign数据。</li>
-<li>处理类不平衡的方法：<ul>
-<li>欠采样：在占比较大的数据中进行采样，选取一部分进行使用，而不是用全部的数据集</li>
-<li>过采样：为占比较少的数据类智能合成数据点</li>
-<li>流行的做法是先过采样，再欠采样</li>
-</ul>
-</li>
-</ul>
-</div><hr></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span></div></nav></div></div><footer><div class="layout" id="footer"><div class="copyright">&copy;2013 - 2020 By Alston</div><div class="framework-info"><span>Driven - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span><span></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><canvas class="fireworks"></canvas><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="false"><div class="author-info"><div class="author-info__avatar text-center"><img src="https://pic3.zhimg.com/80/v2-d9d084bca02482473f2e8d234a99edb5_hd.jpg"></div><div class="author-info__name text-center">Alston</div><div class="author-info__description text-center">计算机硕士在读</div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">1</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">1</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接</div><a class="author-info-links__name text-center" href="http://androidweekly.net/" target="_blank" rel="noopener">ANDROID WEEKLY</a><a class="author-info-links__name text-center" href="https://toutiao.io/" target="_blank" rel="noopener">开发者头条</a><a class="author-info-links__name text-center" href="http://www.androidweekly.cn/" target="_blank" rel="noopener">开发技术周报</a></div></div></div><nav id="nav" style="background-image: url(https://desk-fd.zol-img.com.cn/t_s960x600c5/g2/M00/0A/0A/ChMlWlz3U4OIPcZQAAzptvLfCWMAAKkVgN3Z6YADOnO861.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Alston's blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="site-info"><div id="site-title">Alston's blog</div><div id="site-sub-title">When you collect everything, you understand nothing.</div><div id="site-social-icons"><a class="social-icon" href="https://github.com/lizitong67" target="_blank" rel="noreferrer noopener nofollow"><i class="fa-github fa"></i></a></div></div></nav><div id="content-outer"><div class="layout" id="content-inner"><div class="recent-post-item article-container"><a class="article-title" href="/2020/02/03/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%8E%E5%AE%89%E5%85%A8%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">《机器学习与安全》读书笔记</a><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-02-03</time><span class="article-meta tags"><span class="article-meta__separator">|</span><i class="fa fa-tag article-meta__icon" aria-hidden="true"></i><a class="article-meta__tags" href="/tags/%E5%AE%89%E5%85%A8%E6%95%B0%E6%8D%AE%E7%A7%91%E5%AD%A6/">安全数据科学</a></span><div class="content">我看的是《Machine Learning and Security》的翻译版，原书应该是安全数据科学领域一本比较不错的而且较为基础的书，奈何翻译的太差而且本人水平有限，对书中的许多内容了解的不多，而且书中的代码部分并没有自己亲自实现，只是选取了安全领域的异常检测、恶意软件分析和网络流量分析三个部分 ...</div><a class="more" href="/2020/02/03/%E3%80%8A%E6%9C%BA%E5%99%A8%E5%AD%A6%E4%B9%A0%E4%B8%8E%E5%AE%89%E5%85%A8%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/#more" style="margin-top: 14px">阅读更多</a><hr></div><nav id="pagination"><div class="pagination"><span class="page-number current">1</span></div></nav></div></div><footer class="footer-bg" style="background-image: url(https://desk-fd.zol-img.com.cn/t_s960x600c5/g2/M00/0A/0A/ChMlWlz3U4OIPcZQAAzptvLfCWMAAKkVgN3Z6YADOnO861.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2020 By Alston</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_site_uv"><i class="fa fa-user"></i><span id="busuanzi_value_site_uv"></span><span></span></span><span class="footer-separator">|</span><span id="busuanzi_container_site_pv"><i class="fa fa-eye"></i><span id="busuanzi_value_site_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><script src="/js/search/local-search.js"></script><script id="ribbon" src="/js/third-party/canvas-ribbon.js" size="150" alpha="0.6" zIndex="-1" data-click="false"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
   $('#nav').addClass('is-mobile')
   $('footer').addClass('is-mobile')
   $('#top-container').addClass('is-mobile')
-}</script></body></html>
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"/live2dw/assets/hibiki.model.json"},"display":{"superSample":2,"width":100,"height":220,"position":"right","hOffset":0,"vOffset":10},"log":false,"tagMode":false});</script><script>'use strict';'serviceWorker'in navigator&&navigator.serviceWorker.register('service-worker.js').then(function(a){a.onupdatefound=function(){var b=a.installing;b.onstatechange=function(){switch(b.state){case'installed':navigator.serviceWorker.controller?console.log('New or updated content is available.'):console.log('Content is now available offline!');break;case'redundant':console.error('The installing service worker became redundant.');}}}}).catch(function(a){console.error('Error during service worker registration:',a)});
+</script></body></html>
