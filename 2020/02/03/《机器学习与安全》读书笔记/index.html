@@ -56,7 +56,7 @@
 </ul>
 <p>（7）统计度量</p>
 <ul>
-<li>绝对中位差（median absolute deviation，MAD）：去查找一群数据中的离群值，表示为数列中位数的绝对偏差的中位数<br />
+<li>绝对中位差（median absolute deviation，MAD）：去查找一群数据中的离群值，表示为数列中位数的绝对偏差的中位数<br>
 import numpy as np</li>
 </ul>
 <figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> numpy <span class="keyword">as</span> np</span><br><span class="line"><span class="comment"># Input data series</span></span><br><span class="line">x = [<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>, <span class="number">5</span>, <span class="number">6</span>]</span><br><span class="line"><span class="comment"># Calculate median absolute deviation</span></span><br><span class="line">mad = np.median(np.abs(x - np.median(x)))</span><br><span class="line"><span class="comment"># MAD of x is 1.5</span></span><br></pre></td></tr></table></figure>
@@ -107,7 +107,7 @@ import numpy as np</li>
 <li>动态分析：运行程序分析（沙箱）
 <ul>
 <li>调试</li>
-<li>动态插桩：通过挂钩正在运行的进程，并将自定义逻辑注入到应用程序中，从而修改应用程序或环境的运行时行为<br />
+<li>动态插桩：通过挂钩正在运行的进程，并将自定义逻辑注入到应用程序中，从而修改应用程序或环境的运行时行为<br>
 可用做特征的指标：</li>
 </ul>
 </li>
