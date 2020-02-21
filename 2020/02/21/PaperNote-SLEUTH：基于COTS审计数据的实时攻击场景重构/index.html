@@ -1,0 +1,217 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="PaperNote-SLEUTH：基于COTS审计数据的实时攻击场景重构"><meta name="keywords" content="科研"><meta name="author" content="Alston"><meta name="copyright" content="Alston"><title>PaperNote-SLEUTH：基于COTS审计数据的实时攻击场景重构 | Alston's blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><canvas class="fireworks"></canvas><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-摘要"><span class="toc-text"> 1 摘要</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-介绍"><span class="toc-text"> 2 介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#21-方法概览"><span class="toc-text"> 2.1 方法概览</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#22-贡献"><span class="toc-text"> 2.2 贡献</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#221-基于内存的依赖图表示"><span class="toc-text"> 2.2.1 基于内存的依赖图表示</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#222-基于标签"><span class="toc-text"> 2.2.2 基于标签</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#223-利用标签进行溯源和影响性分析"><span class="toc-text"> 2.2.3 利用标签进行溯源和影响性分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#224-可定制的策略框架"><span class="toc-text"> 2.2.4 可定制的策略框架</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#225-实验评估为darpa-tc项目"><span class="toc-text"> 2.2.5 实验评估为DARPA TC项目</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-主存依赖图"><span class="toc-text"> 3 主存依赖图</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-标签和攻击检测"><span class="toc-text"> 4 标签和攻击检测</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#41-标签设计"><span class="toc-text"> 4.1 标签设计</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#42-基于标签的攻击检测"><span class="toc-text"> 4.2 基于标签的攻击检测</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-策略框架"><span class="toc-text"> 5 策略框架</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#51-标签初始化策略"><span class="toc-text"> 5.1 标签初始化策略</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#52-标签传播策略"><span class="toc-text"> 5.2 标签传播策略</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-基于标签的双向分析"><span class="toc-text"> 6 基于标签的双向分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#61-回溯分析"><span class="toc-text"> 6.1 回溯分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#62-前向分析"><span class="toc-text"> 6.2 前向分析</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-实验评估"><span class="toc-text"> 7 实验评估</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#71-数据集"><span class="toc-text"> 7.1 数据集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#72-重建结果"><span class="toc-text"> 7.2 重建结果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#73-总体效果"><span class="toc-text"> 7.3 总体效果</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#74-误报"><span class="toc-text"> 7.4 误报</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#75-运行时间和内存使用"><span class="toc-text"> 7.5 运行时间和内存使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#76-为数据和代码分别分配标签的好处"><span class="toc-text"> 7.6 为数据和代码分别分配标签的好处</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://pic4.zhimg.com/80/v2-1b0d0240350e3d8e0550845b6bdaad1e_hd.jpg"></div><div class="author-info__name text-center">Alston</div><div class="author-info__description text-center">计算机硕士在读</div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">37</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">11</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接</div><a class="author-info-links__name text-center" href="https://blog.csdn.net/Sc0fie1d" target="_blank" rel="noopener">CSDN</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://desk-fd.zol-img.com.cn/t_s960x600c5/g2/M00/0A/0A/ChMlWlz3U4OIPcZQAAzptvLfCWMAAKkVgN3Z6YADOnO861.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Alston's blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">PaperNote-SLEUTH：基于COTS审计数据的实时攻击场景重构</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-02-21</time><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">7.3k</span><span class="post-meta__separator">|</span><span>阅读时长: 22 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>原文标题：SLEUTH: Real-time Attack Scenario Reconstruction from COTS Audit Data</p>
+<p>原文作者：Md Nahid Hossain, <em>Stony Brook University;</em> Sadegh M. Milajerdi, <em>University of Illinois at Chicago;</em> Junao Wang, <em>Stony Brook University;</em> Birhanu Eshete and Rigel Gjomemo, <em>University of Illinois at Chicago;</em> R. Sekar and Scott Stoller, <em>Stony Brook University;</em> V.N. Venkatakrishnan, <em>University of Illinois at Chicago</em></p>
+<p>原文来源：USENIX 2017</p>
+<p>原文链接：<a href="https://www.usenix.org/conference/usenixsecurity17/technical-sessions/presentation/hossain" target="_blank" rel="noopener">https://www.usenix.org/conference/usenixsecurity17/technical-sessions/presentation/hossain</a></p>
+<h1 id="1-摘要"><a class="markdownIt-Anchor" href="#1-摘要"></a> 1 摘要</h1>
+<p>本文提出了一种可以在企业主机上<strong>实时重构攻击场景</strong>的方法和系统——SLEUTH，开发了一种<strong>平台无关</strong>、<strong>基于主存</strong>的审计日志数据<strong>依赖图抽象</strong>。</p>
+<p>本文提出了一种<strong>基于标签</strong>的技术来分析攻击行为，包括<strong>源识别和影响分析</strong>。同时本文通过构建<strong>简洁、可视的攻击步骤</strong>来揭示攻击的总体情况。系统所用的评估数据仍然来自DARPA组织的红队攻击。</p>
+<h1 id="2-介绍"><a class="markdownIt-Anchor" href="#2-介绍"></a> 2 介绍</h1>
+<p>像IDS和SIEM这样的工具会产生大量的信息，安全分析人员从中辨别出真正的攻击变得十分困难；而且，对于跨越多个应用、主机以及时间跨度很长的攻击行为，分析人员缺乏工具将这些片段拼凑起来。因此，分析人员所需要的工具不仅能够检测攻击，而且能够产生基于因果的攻击链的简单总结。据此，分析人员可以快速判断系统是否遭受了入侵、了解攻击者是如何发动攻击的以及确定攻击带来的影响。</p>
+<p>实时检测相对于取证分析（Forensic Analysis）而言，存在下面几个挑战：</p>
+<ul>
+<li><strong>事件（Event）存储和分析</strong>：如何高效地存储上百万条记录，并在几秒钟的时间内筛选这些数据</li>
+<li><strong>将实体（Entities）按优先级排序</strong>：如何协助分析人员，在大量的数据中优先选出并放大最有可能是攻击行为的场景。</li>
+<li><strong>场景重构</strong>：如何从攻击者的入口点开始，简洁地总结攻击场景，并识别整个攻击行为的影响</li>
+<li><strong>处理常见的使用场景</strong>：如何处理类似于攻击期间活动的正常行为，如软件下载</li>
+<li><strong>快速地交互式推理</strong>：如何让分析人员通过数据有效地进行推理，比如在“可选择性假设”的情况下。</li>
+</ul>
+<h2 id="21-方法概览"><a class="markdownIt-Anchor" href="#21-方法概览"></a> 2.1 方法概览</h2>
+<p><img src="https://img-blog.csdnimg.cn/20200212095101709.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<p>来自不同操作系统的审计数据被处理成平台独立的图，其中<strong>顶点表示subjects</strong>（进程）和<strong>objects</strong>（文件、sockets）；<strong>边表示审计事件</strong>（读、写、执行等操作；连接）。这个图作为攻击检测、关联分析和场景重构的基础。</p>
+<h2 id="22-贡献"><a class="markdownIt-Anchor" href="#22-贡献"></a> 2.2 贡献</h2>
+<h3 id="221-基于内存的依赖图表示"><a class="markdownIt-Anchor" href="#221-基于内存的依赖图表示"></a> 2.2.1 基于内存的依赖图表示</h3>
+<p>为了应对第一个挑战，本文开发了简洁的<strong>基于内存</strong>的依赖图表示，解决了如何高效地存储和分析事件的问题。基于主存的图算法可以比基于硬盘快几个数量级，这是本文能做到实时分析的一个重要因素。在实验中能够在14秒内处理79小时的FreeBSD审计数据，内存消耗84MB，该速度比数据生成速度快20K倍。</p>
+<h3 id="222-基于标签"><a class="markdownIt-Anchor" href="#222-基于标签"></a> 2.2.2 基于标签</h3>
+<p>为了应对第二个挑战，本文开发了<strong>基于标签</strong>（tag-based）的方法来识别最有可能涉及攻击的subjects、objects和events。标签代表对数据（objects）和进程（subjects）的**可信度（trustworthiness）<strong>和</strong>敏感度（sensitivity）**的评估。</p>
+<h3 id="223-利用标签进行溯源和影响性分析"><a class="markdownIt-Anchor" href="#223-利用标签进行溯源和影响性分析"></a> 2.2.3 利用标签进行溯源和影响性分析</h3>
+<p>为了应对第三个挑战，本文开发的算法可以使用标签来对攻击进行溯源和影响性分析。从告警产生的位置来时，<strong>回溯分析</strong>算法可以根据图中的依赖性识别攻击的源头；从攻击源头开始，<strong>前向搜索</strong>算法可以进行全面的影响分析。同时，本文提出了一些准测用来修剪这些搜索过程，从而生成简洁的图。实验结果表明，SLEUTH可以将38.5M的事件转换为包含130个事件的攻击场景图，其大小降低了5个数量级。</p>
+<h3 id="224-可定制的策略框架"><a class="markdownIt-Anchor" href="#224-可定制的策略框架"></a> 2.2.4 可定制的策略框架</h3>
+<p>为了应对最后两个挑战，本文提出了可定制的策略框架，用于标签的初始化和传播。本文的框架给出了合理的默认值，但也可以根据特定的操作系统或应用来进行调整，从而避免误报。</p>
+<p>分析人员还可以测试攻击的“可选择性假设”，如果分析人员怀疑某个行为是攻击的结果，可以使用策略捕获这些行为，然后重新运行分析以发现其原因和影响（重放）。由于其处理和分析比数据的生成快上万倍，所以可以对假设进行高效、并行、实时的测试。</p>
+<h3 id="225-实验评估为darpa-tc项目"><a class="markdownIt-Anchor" href="#225-实验评估为darpa-tc项目"></a> 2.2.5 实验评估为DARPA TC项目</h3>
+<p>在此次评估中，攻击活动模拟现代的APT组织在Windows、FreeBSD和Linux上展开了为期两周的攻击。在评估中，SLEUTH可以做到：</p>
+<ul>
+<li>在几秒钟的时间内，处理包含数千万事件的审计日志</li>
+<li>成功地检测和重构攻击细节，包括攻击入口点、在系统中的活动和逃逸点</li>
+<li>过滤与攻击不相关的事件（削减率可以到达100K倍），从而可以提供一个关于攻击的几乎没有噪声的语义表示</li>
+<li>较低的误报率和漏报率</li>
+</ul>
+<p>该系统设计的目的不在于检测出最高级的APT攻击，而是在给定许多未知可能性的情况下，<strong>不需要人工干预</strong>，该系统就能够实时的给出一个按照威胁程度排列的结果。</p>
+<h1 id="3-主存依赖图"><a class="markdownIt-Anchor" href="#3-主存依赖图"></a> 3 主存依赖图</h1>
+<p>为了支持快速检测和实时分析，本文以图作为数据结构存储依赖关系。一种可行的方法是使用图数据库，例如Neo4J、Titan，但是除非内存足够大，否则这些数据库在运行许多图算法时会受到限制；另外，对于我们的问题来说，一般的图数据库内存消耗太高，即便是进行过内存优化的两个图数据库STINGER和NetworkX，存储一条边也要消耗250 bytes和3 KB。因此，本文提出了一种<strong>更加节省内存的依赖图设计</strong>，每条边仅占10 bytes，在实验中存储38M的事件仅需要329MB的内存。</p>
+<p>依赖图包含两种类型的<strong>实体</strong>：</p>
+<ul>
+<li>Subjects：
+<ul>
+<li>表示进程；</li>
+<li>属性值包括：process id（pid）、命令行、所有者（owner）以及代码和数据的标签</li>
+</ul>
+</li>
+<li>Objects：
+<ul>
+<li>表示实体，例如文件、pipes、网络连接</li>
+<li>属性值包括：名称、类型（文件、pipe、socket等）、所有者和标签</li>
+</ul>
+</li>
+</ul>
+<p><strong>事件</strong>：subjects和objects之间或者两个subjects之间带标签的边，用<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi><mi>e</mi><mi>a</mi><mi>d</mi><mi mathvariant="normal">、</mi><mi>c</mi><mi>o</mi><mi>n</mi><mi>n</mi><mi>e</mi><mi>c</mi><mi>t</mi><mi mathvariant="normal">、</mi><mi>e</mi><mi>x</mi><mi>e</mi><mi>c</mi><mi>v</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">read、connect、execve</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">e</span><span class="mord mathdefault">a</span><span class="mord mathdefault">d</span><span class="mord cjk_fallback">、</span><span class="mord mathdefault">c</span><span class="mord mathdefault">o</span><span class="mord mathdefault">n</span><span class="mord mathdefault">n</span><span class="mord mathdefault">e</span><span class="mord mathdefault">c</span><span class="mord mathdefault">t</span><span class="mord cjk_fallback">、</span><span class="mord mathdefault">e</span><span class="mord mathdefault">x</span><span class="mord mathdefault">e</span><span class="mord mathdefault">c</span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="mord mathdefault">e</span></span></span></span>来表示</p>
+<p>为了减少依赖图的存储需求，在所有可能的地方，<strong>使用32-bit的标识符而不是64-bit的指针</strong>，这使得单台主机的依赖图可以存储40亿的subjects和objects，我们所使用的数据集远小于该数字。</p>
+<p>本文的设计强调实体的简洁数据结构，然而<strong>事件的简洁性</strong>更为重要。因为事件的数量要比实体大两个数量级，而且事件和实体的比例随着时间而增加。因此我们需要为事件设计一个更加简洁的表示，使许多事件仅用6 bytes就能表示。</p>
+<p><strong>事件存储在subjects中</strong>，从而消除了subject-event的指针、事件标识符（event id）的需求。他们的表示采用<strong>可变长编码</strong>，在通常情况下可以采用4 bytes，当需要时可以扩展到8、12或者16 bytes。</p>
+<p>（不懂）大多数事件是对objects进行操作，并且有<strong>时间戳</strong>。由于每个subject的事件顺序保持不变，因此我们无需为时间戳设置微秒级的粒度，而是选择了毫秒级的粒度。另外，我们仅存储同一subject中自上一个事件以来的相对时间，这使得我们在通常情况下可以使用16-bits来表示时间戳。</p>
+<p>object使用索引指向<strong>object标识符</strong>的<strong>per-subject表</strong>。这些索引可以看作文件描述，他们通常都是一些较小的值，因为大多数的subjects使用了相对较少的objects，这使得object引用（索引？？）可以用8 bits或更少来表示。</p>
+<p>我们用3 bits或更少<strong>对经常出现的事件名称进行编码</strong>，如open、close、read和write。这给我们留下了几位用于存储事件变量信息的摘要，同时仍在32位之内。</p>
+<p>（重要）对于取证分析来说，需要我们从object追溯subject。鉴于此，我们需要<strong>使用object-event记录</strong>来维护objects中的事件信息。该记录仅维护事件的一部分子集，具体而言，比如像read和write这样会导致数据流的事件。object-event记录可以通过<strong>存储一个指向对应subject-event记录的引用</strong>来进一步收缩，而不是复制完全一样的信息。</p>
+<p>类似于subject-event记录，我们对<strong>object-event记录</strong>也采用<strong>可变长编码</strong>，使得他们在通常情况下只需要16 bits来存储。我们注意到，object一次仅被一个subject操作，这个subject可能会在该object上进行一系列的动作，比如打开、读、写、关闭。每个动作都对应一个subject-event记录和object-event记录，由于这些记录的subject和object是相同的，所以我们可以在object-event记录中重用subject，从而在大多数记录中可以不存储subject标识符。</p>
+<p>接下来，我们允许object-event记录为subject中的事件记录存储一个<strong>相对索引</strong>，subject中两个连续的事件记录可能比较接近，一般会是几十或者几百个。这意味着存储在object-event记录中的相对索引大多数情况下12 bits就够了，所以我们分配16 bits足矣。</p>
+<p>（总结）这种设计使我们使用<strong>6 bytes</strong>就可以存储<strong>双向的带时间戳的</strong>边，subject-event记录占4 bytes，object-event记录占2字节。在实验中使用更大的数据集时，平均每个事件占用内存也在10 bytes以内。可变长编码还使得我们可以表示重要但出镜率比较少的事件，比如<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi><mi>e</mi><mi>n</mi><mi>a</mi><mi>m</mi><mi>e</mi><mi mathvariant="normal">、</mi><mi>c</mi><mi>h</mi><mi>m</mi><mi>o</mi><mi>d</mi><mi mathvariant="normal">、</mi><mi>e</mi><mi>x</mi><mi>e</mi><mi>c</mi><mi>v</mi><mi>e</mi><mi mathvariant="normal">等</mi></mrow><annotation encoding="application/x-tex">rename、chmod、execve等</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">e</span><span class="mord mathdefault">n</span><span class="mord mathdefault">a</span><span class="mord mathdefault">m</span><span class="mord mathdefault">e</span><span class="mord cjk_fallback">、</span><span class="mord mathdefault">c</span><span class="mord mathdefault">h</span><span class="mord mathdefault">m</span><span class="mord mathdefault">o</span><span class="mord mathdefault">d</span><span class="mord cjk_fallback">、</span><span class="mord mathdefault">e</span><span class="mord mathdefault">x</span><span class="mord mathdefault">e</span><span class="mord mathdefault">c</span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="mord mathdefault">e</span><span class="mord cjk_fallback">等</span></span></span></span>。</p>
+<h1 id="4-标签和攻击检测"><a class="markdownIt-Anchor" href="#4-标签和攻击检测"></a> 4 标签和攻击检测</h1>
+<p>问题：标签是什么？？</p>
+<p>我们使用标签来描述<strong>objects和subjects的可信度和敏感度</strong>。对可信度和敏感度的评估基于以下三个因素：</p>
+<ul>
+<li>起源（Provenance）：依赖图中，subject或object直接祖先的标记</li>
+<li>系统先验知识：我们对一些重要应用行为的了解，比如远程接入服务器、软件安装程序和重要的文件（/etc/passwd 和 /dev/audio）</li>
+<li>行为：观察subject的行为，并将其与预期行为进行比较</li>
+</ul>
+<p>一个<strong>默认的策略</strong>被用从从input到output<strong>传播标签</strong>：为output分配input的可信度标签中的最低值，以及机密性标签的最大值（也就是说，入口点的行为是危险的，出口点的行为也被标注为危险；入口点的数据是机密的，出口点的数据也被标注为是机密的）。这是一种保守的策略，该策略可能会导致一些良性事件被错误地识别为恶意事件（over-tainting），但绝不会漏掉攻击。</p>
+<p><strong>标签在SLEUTH中扮演了核心角色</strong>。它为攻击检测提供了重要的上下文信息，每个事件都在这些标记组成的上下文中进行解释，以确定其导致攻击的可能性。此外，标签对我们的前向和回溯分析的速度也很有用。最后，标签为消除大量与攻击无关的审计数据也起到了关键作用。</p>
+<h2 id="41-标签设计"><a class="markdownIt-Anchor" href="#41-标签设计"></a> 4.1 标签设计</h2>
+<p>如下定义<strong>可信度标签（trustworthiness tags，t-tags）</strong>，可信度依次降低：</p>
+<ul>
+<li><strong>良性可信标签（Benign authentic tag）</strong>：为<strong>数据和代码</strong>分配该标签，其来源（source）为<strong>良性</strong>且可靠性<strong>可被验证</strong>的</li>
+<li><strong>良性标签（Benign tag）</strong>：为<strong>数据和代码</strong>分配该标签，其来源为<strong>良性</strong>，但是来源可靠性<strong>未被充分验证</strong></li>
+<li><strong>未知标签（Unknown tag）</strong>：为<strong>数据和代码</strong>分配该标签，但是其来源未知</li>
+</ul>
+<p>策略（policy）定义了那些来源是良性的，哪些来源验证时充分的；策略的最简单情况是白名单。如果对于某个源，没有策略应用在它上面，那么这个源则被打上未知标签。</p>
+<p>如下定义<strong>机密性标签（confidentiality tags，c-tags）</strong>，机密性依次降低：</p>
+<ul>
+<li><strong>Secret</strong>：高度敏感的信息，例如登陆凭证、私钥</li>
+<li><strong>Sensitive</strong>：数据的披露可能会对安全产生重大影响，例如，披露了系统中的漏洞，但没有为攻击者提供访问系统的直接途径。</li>
+<li><strong>Private</strong>：资料的披露涉及私隐，但未必构成安全威胁。</li>
+<li><strong>Public</strong>：可以被公开的数据</li>
+</ul>
+<p>我们设计的一个重要方面是<strong>分离代码和数据的t-tag</strong>。具体而言，即一个<strong>subject</strong>给定两个t-tag，一个表示其<strong>代码可信度（code trustworthiness，code t-tag）</strong>，另一个表示其<strong>数据可信度（data trustworthiness，data t-tag）</strong>。这样的设计可以削减重建场景的规模，加快取证分析的速度。而<strong>机密性标签仅仅与数据相关联。</strong></p>
+<p>（重要）已经存在的objects和subjects使用<strong>标签初始化策略</strong>分配初始标签。在系统执行过程中还会产生新的objects和subjects，它们由<strong>标签传播策略</strong>分配标签。最后，<strong>基于行为的检测策略</strong>来检测攻击。</p>
+<h2 id="42-基于标签的攻击检测"><a class="markdownIt-Anchor" href="#42-基于标签的攻击检测"></a> 4.2 基于标签的攻击检测</h2>
+<p>检测方法不应该要求知晓特定应用的一些细节，因为这需要有关应用程序的专家知识，而在动态环境中，应用程序可能会频繁更新。</p>
+<p>我们不把着眼点放在变化的应用行为上，而是着眼于攻击者的高级别目标，比如后门插入和信息窃取。具体而言，我们结合了攻击者的<strong>动机和手段</strong>的推理，注意到我们提出的<strong>标签</strong>就是用来捕获攻击者的手段：如果一段数据或代码有<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">未</mi><mi mathvariant="normal">知</mi><mi mathvariant="normal">标</mi><mi mathvariant="normal">签</mi></mrow><annotation encoding="application/x-tex">未知标签</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0em;vertical-align:0em;"></span><span class="mord cjk_fallback">未</span><span class="mord cjk_fallback">知</span><span class="mord cjk_fallback">标</span><span class="mord cjk_fallback">签</span></span></span></span>，那么它就是由不受信任的源产生的。</p>
+<p>根据攻击者的攻击步骤，我们<strong>定义</strong>了下面包含攻击者目标和手段的<strong>策略</strong>（Detection Policy）：</p>
+<ul>
+<li><strong>不受信任的代码执行</strong>：当一个拥有高code t-tag的subject执行或<strong>加载拥有低t-tag的object</strong>时，便会引发警报</li>
+<li><strong>被拥有低code t-tag的subject修改</strong>：当拥有低code t-tag的subject修改一个拥有高t-tag的object时，便会引发警报。修改的可能是文件内容或者文件名、文件权限等。</li>
+<li><strong>机密文件泄露</strong>：当不可信的subjects泄漏敏感数据时，将触发警报。具体地说，也就是具有sensitive c-tag 和 unkonwn code t-tag的subject在网络中执行写操作时会触发警报。</li>
+<li><strong>为执行准备不可信的数据</strong>：该策略由一个拥有unknown t-tag的subject的操作触发，该操作使一个object可执行。这样的操作会包含chmod和mprotect</li>
+</ul>
+<p><strong>一点优势</strong>：值得注意的是，攻击者的手段并不会因为数据或代码经过了多个中间媒介之后而被“稀释”。啥意思呢？举个栗子：对于不受信任的代码执行策略来说，如果直接从未知网站加载数据的话，当然会触发警报。但是，当这些数据是被下载、提取、解压缩，甚至有可能是编译之后再加载的，在经过了重重转化之后，只要数据被加载，该策略仍然能够被触发。随后再进行回溯分析，就可以找到漏洞利用的第一步。</p>
+<p>（<strong>与其它探测器合作的能力</strong>）另外，其它检测器的输入可以很容易地被集成到SLEUTH中。比如说，某个外部的检测器将一个subject标为可疑，这个时候再SLEUTH中可以将该subject的code t-tag标为unknown，从而后面的分析都会受益。此外该操作也会保留图节点之间的依赖关系。</p>
+<p>被不受信的代码执行所触发的策略，不应该被认为工作在静态环境中（需要动态匹配策略），静态环境意味着不允许新代码产生。实际上，我们期望可以连续地更新和升级，但在企业环境中，我们不希望用户下载未知代码。因此，下面会叙述如何支持<strong>标准化的软件更新机制</strong>。</p>
+<h1 id="5-策略框架"><a class="markdownIt-Anchor" href="#5-策略框架"></a> 5 策略框架</h1>
+<p>本文开发了一个灵活的<strong>策略框架（policy framework）</strong>，用于标签的分配、传播和攻击检测。我们使用<strong>基于规则</strong>的记法来描述策略，例如：</p>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">exec</mi><mo>⁡</mo><mo stretchy="false">(</mo><mi>s</mi><mo separator="true">,</mo><mi>o</mi><mo stretchy="false">)</mo><mo>:</mo><mi>o</mi><mi mathvariant="normal">.</mi><mi>t</mi><mi>t</mi><mi>a</mi><mi>g</mi><mo>&lt;</mo><mi>b</mi><mi>e</mi><mi>n</mi><mi>i</mi><mi>g</mi><mi>n</mi><mo>→</mo><mi>a</mi><mi>l</mi><mi>e</mi><mi>r</mi><mi>t</mi><mo stretchy="false">(</mo><mi mathvariant="normal">&quot;</mi><mi>U</mi><mi>n</mi><mi>t</mi><mi>r</mi><mi>u</mi><mi>s</mi><mi>t</mi><mi>e</mi><mi>d</mi><mi>E</mi><mi>x</mi><mi>e</mi><mi>c</mi><mi mathvariant="normal">&quot;</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">\operatorname{exec}(s, o): o.ttag &lt; benign \rightarrow alert (&quot;UntrustedExec&quot;)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mop"><span class="mord mathrm">e</span><span class="mord mathrm">x</span><span class="mord mathrm">e</span><span class="mord mathrm">c</span></span><span class="mopen">(</span><span class="mord mathdefault">s</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">o</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">:</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.80952em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">o</span><span class="mord">.</span><span class="mord mathdefault">t</span><span class="mord mathdefault">t</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">b</span><span class="mord mathdefault">e</span><span class="mord mathdefault">n</span><span class="mord mathdefault">i</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">→</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">t</span><span class="mopen">(</span><span class="mord">&quot;</span><span class="mord mathdefault" style="margin-right:0.10903em;">U</span><span class="mord mathdefault">n</span><span class="mord mathdefault">t</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">u</span><span class="mord mathdefault">s</span><span class="mord mathdefault">t</span><span class="mord mathdefault">e</span><span class="mord mathdefault">d</span><span class="mord mathdefault" style="margin-right:0.05764em;">E</span><span class="mord mathdefault">x</span><span class="mord mathdefault">e</span><span class="mord mathdefault">c</span><span class="mord">&quot;</span><span class="mclose">)</span></span></span></span></p>
+<p>这条规则被触发的条件是：当一个subject <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>s</mi></mrow><annotation encoding="application/x-tex">s</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">s</span></span></span></span>执行了一个object <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>o</mi></mrow><annotation encoding="application/x-tex">o</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">o</span></span></span></span>（比如文件），而<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>o</mi></mrow><annotation encoding="application/x-tex">o</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">o</span></span></span></span>的t-tag要小于良性。</p>
+<p>在该策略框架中，<strong>规则通常与事件关联</strong>，并且包含objects或subjects的<strong>属性的一些条件</strong>，这些属性包括：</p>
+<ul>
+<li><strong>name</strong>：使用Perl正则表达式来匹配<strong>object name</strong>和<strong>subject命令行</strong></li>
+<li><strong>tags</strong>: 条件中可以放置objects或subjects的t-tags或者c-tags。对于subjects来说，代码和数据的t-tag可以分别使用</li>
+<li><strong>所有权和权限</strong>：条件中可以放置objects和subjects的所有权，或者objects和事件权限</li>
+</ul>
+<p>不同类型的策略有不同的作用：</p>
+<ul>
+<li>检测策略：引发警报</li>
+<li>标签初始化和传播策略：修改标签</li>
+</ul>
+<p>（干嘛的？）<strong>触发点（trigger points）</strong>：为了更好地控制不同类型策略的匹配，我们将策略与触发点联系起来。此外，触发点允许有相似目的的不同事件共享策略。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200212095214302.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<p>上图展示了策略框架中定义的触发点，<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mi>e</mi><mi>f</mi><mi>i</mi><mi>n</mi><mi>e</mi></mrow><annotation encoding="application/x-tex">define</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span><span class="mord mathdefault">e</span></span></span></span>表示一个新的object，比如一个新网络连接的建立、首次提及一个已经存在的文件、新文件的创建等。</p>
+<p>（检测策略匹配过程）当事件出现时，检测策略就会被执行。后面，除非手动配置，否则仅当<strong>目标subject或object</strong>（某个信息流的终点，Target）发生变化时，检测策略才会被再次执行。</p>
+<p>（标签策略）然后，标签策略按照指定的顺序进行尝试，一旦规则匹配，被规则指定的标签将会被分配给<strong>目标事件（Target，也就是subject/object）</strong></p>
+<h2 id="51-标签初始化策略"><a class="markdownIt-Anchor" href="#51-标签初始化策略"></a> 5.1 标签初始化策略</h2>
+<p>该策略被<strong>init trigger</strong>唤醒，然后将初始化标签应用于新的objects（subject呢？），或者早已存在但是在审计数据中第一次提及的objects。回顾一下，当一个subject创建了一个object的时候，默认object会继承该subject的标签，但是用标签初始化策略会将其覆盖。</p>
+<p>仍使用正则表达式来为object定义初始化标签：<br />
+<img src="https://img-blog.csdnimg.cn/20200212095225885.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<h2 id="52-标签传播策略"><a class="markdownIt-Anchor" href="#52-标签传播策略"></a> 5.2 标签传播策略</h2>
+<p>该策略可以覆盖默认标签。</p>
+<p>该策略还可以防止“过度污染”，例如某应用每次被唤醒的时候，都会读写<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi mathvariant="normal">.</mi><mi>b</mi><mi>a</mi><mi>s</mi><mi>h</mi><mi mathvariant="normal">_</mi><mi>h</mi><mi>i</mi><mi>s</mi><mi>t</mi><mi>o</mi><mi>r</mi><mi>y</mi></mrow><annotation encoding="application/x-tex">.bash\_history</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.00444em;vertical-align:-0.31em;"></span><span class="mord">.</span><span class="mord mathdefault">b</span><span class="mord mathdefault">a</span><span class="mord mathdefault">s</span><span class="mord mathdefault">h</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathdefault">h</span><span class="mord mathdefault">i</span><span class="mord mathdefault">s</span><span class="mord mathdefault">t</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault" style="margin-right:0.03588em;">y</span></span></span></span>文件，但是该操作是正常的，下面的策略对该文件不进行任何操作：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200212100022897.png" alt="" /></p>
+<p>下面的策略将bash读取文件的行为视为加载（load）：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200212100034491.png" alt="" /></p>
+<p>下面的策略对sshd的行为进行任何操作。虽然受信任的服务，比如sshd会与不受信的站点进行交互，但是这些服务被认为可以自我保护，并且仅允许授权用户访问系统，因此这样的服务不应该给他们的数据可信度降级。同样从不受信站点下载的软件安装包或更新包，但是在安装之前会验证受信的软件提供商前面。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200212100055768.png" alt="" /></p>
+<p>另外，当登录阶段完成之后，通常通过执行setuid操作来标识，所以应该为进程分配适当的标签：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200212100624718.png" alt="" /></p>
+<h1 id="6-基于标签的双向分析"><a class="markdownIt-Anchor" href="#6-基于标签的双向分析"></a> 6 基于标签的双向分析</h1>
+<h2 id="61-回溯分析"><a class="markdownIt-Anchor" href="#61-回溯分析"></a> 6.1 回溯分析</h2>
+<p>回溯分析的目标是识别攻击的入口点，入口点是图中入度为0的节点，并且被标记为untrusted。通常是网络连接，但有时也会是其他形式，比如U盘中的文件。</p>
+<p><strong>回溯分析的起点是检测策略产生警报的地方</strong>。每个警报都与一个或多个实体相关，这些实体在图中被标记为可疑节点。反向搜索涉及对图的反向遍历，从而识别由可疑节点连接到入口点的路径。我们注意到，在这样的遍历和接下来的讨论中，依赖关系边的方向是相反的。反向搜索带来了几个重大<strong>挑战</strong>:</p>
+<ul>
+<li><strong>性能</strong>：依赖图可能包含数亿条边。警报数可以达到数千。在这么大的图上执行反向搜索，会消耗大量的计算资源。</li>
+<li><strong>多路径</strong>：通常，从可疑节点向后可访问多个入口点。然而，在APT攻击中，通常只有一个真正的入口点。因此，简单的反向搜索可能会导致大量的误报</li>
+</ul>
+<p>标签可以用来解决这两个挑战。一方面，标签的计算和传播本来就是一种简洁的路径计算。另一方面，如果节点的标签值是unknown，那么该节点很有可能会构成攻击路径。如果节点A的标签是unknown，这意味着至少存在一条路径，从不受信任的入口点指向节点A，这样节点A就比其他拥有良性标签的邻居节点更有可能是攻击的一部分。使用标签来进行反向搜索，消除许多无关节点，极大地减少了搜索空间。</p>
+<p>基于此，我们将反向分析当作<strong>最短路径问题</strong>的一个实例，<strong>标签</strong>被用来定义边的<strong>代价（cost）</strong>。一方面，标签能够“引导”搜索沿着攻击相关的路径，并远离不相关的路径。这使得搜索可以在不必遍历整个图的情况下完成，从而解决了性能方面的挑战。另一方面，最短路径算法通过选择最接近可疑节点的入口点（以路径成本衡量）来解决多个路径的挑战。</p>
+<p>计算最短路径使用<strong>Dijkstra算法</strong>，当入口点被加入到路径中时，算法就停止。</p>
+<p><strong>代价函数设计</strong>：对于那些表示节点依赖关系的<strong>边</strong>，如果其标签是**“未知”<strong>，则为其分配</strong>较低的开销**；其它节点分配较高的开胶，<strong>具体地说：</strong></p>
+<ul>
+<li>从一个“未知”数据/代码 t-tag 的节点，到一个“良性”代码/数据 t-tag 节点的边，为其分配<strong>代价为0</strong></li>
+<li>从一个“良性”代码/数据 t-tag 的节点引出的边，为其分配一个<strong>较高的代价</strong></li>
+<li>从已有“未知” tag 的节点之间引入边，为其分配<strong>代价为1</strong></li>
+</ul>
+<p>与未知 subject/object 直接相关的良性 subject/object 表示图中恶意和良性部分之间的边界。因此，它们必须包含在搜索中，因此这些边的代价是0。</p>
+<p>良性实体之间的信息流动不是攻击的一部分，因此我们将它们的代价设置得非常高，以便将它们排除在搜索之外。</p>
+<p>不可信节点之间的信息流可能是攻击的一部分，因此我们将它们的代价设置为一个较低的值。它们将被包括在搜索结果中，除非由较少边组成的可选路径可用。</p>
+<h2 id="62-前向分析"><a class="markdownIt-Anchor" href="#62-前向分析"></a> 6.2 前向分析</h2>
+<p>前向分析的目的是为了评估攻击的影响。通过从一个入口点开始，发现所有依赖于入口点的可能影响。与反向分析类似，主要的挑战是图的大小。一种简单的方法是，标记<strong>所有</strong>从入口点可到达的 subject/object，这些 subject/object 是通过反向分析得到的。不幸的是，这种方法将导致<strong>影响图</strong>太大。</p>
+<p>在实验中，利用这种方法得到的影响图包含数百万条边，利用我们的简化算法可以降低100到500倍。</p>
+<p>一个降低其大小的方法是使用<strong>距离阈值</strong><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>d</mi><mrow><mi>t</mi><mi>h</mi></mrow></msub></mrow><annotation encoding="application/x-tex">d_{t h}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.84444em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">d</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.33610799999999996em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">t</span><span class="mord mathdefault mtight">h</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>，来排除那些距离可疑节点太远的点，分析人员可以调节该阈值。我们使用在回溯分析时使用到的 cost 。</p>
+<p>（为什么回溯分析不考虑？？）不同于回溯分析的是，我们考虑<strong>机密性</strong>。特别的，一条边两端的节点，一个由<strong>高机密性标签</strong>，另外一个具有<strong>低代码 integrity（可信度？？） 标签</strong>（如未知进程）或者<strong>低数据 integrity 标签</strong>（如未知socket），那么为这条边分配<strong>代价为0</strong>；而当另一个节点由<strong>良性标签</strong>时，为其分配<strong>较高代价值。</strong></p>
+<h1 id="7-实验评估"><a class="markdownIt-Anchor" href="#7-实验评估"></a> 7 实验评估</h1>
+<p>（请求公开源码）</p>
+<h2 id="71-数据集"><a class="markdownIt-Anchor" href="#71-数据集"></a> 7.1 数据集</h2>
+<p><img src="https://img-blog.csdnimg.cn/20200212100637602.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<p>数据集同样来自DARPA TC项目，时间跨度为358小时，包含7300万事件。最后一行是历经3-5天从4台Linux服务器上收集到的良性数据，是本文作者在其实验室中自己生成的。</p>
+<h2 id="72-重建结果"><a class="markdownIt-Anchor" href="#72-重建结果"></a> 7.2 重建结果</h2>
+<p>（1）下图是W-2的攻击场景图：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200212100648331.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<p>（2）下图是F-3的攻击场景图，攻击者使用<strong>窃取的ssh凭证</strong></p>
+<ul>
+<li><strong>scp：secure copy</strong>，用于远程文件拷贝</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20200212100658575.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<h2 id="73-总体效果"><a class="markdownIt-Anchor" href="#73-总体效果"></a> 7.3 总体效果</h2>
+<p>（1）经典APT攻击阶段汇总</p>
+<p><img src="https://img-blog.csdnimg.cn/20200212100707980.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<p>除了上述阶段，其它比较重要的APT阶段包括<strong>后门植入</strong>、<strong>C&amp;C服务器</strong>、<strong>痕迹清除</strong>（包括攻击过程中投放的可执行文件和创建的文件）和<strong>数据窃取</strong>。</p>
+<p>下图通过计数关键文件、网络连接、攻击涉及的程序数量，将攻击场景重建结果分割：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200212100716259.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<p>其中，入口实体包括入口点以及与入口点进行通信的进程。Exit Points用于逃逸，比如网络套接字。</p>
+<h2 id="74-误报"><a class="markdownIt-Anchor" href="#74-误报"></a> 7.4 误报</h2>
+<p>评估SLEUTH在良性环境下的表现，用到了作者在自己的实验室中生成的良性数据。四台服务器上的数据主要来源于软件的更新和升级：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200212100724654.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<p>正如前面所提到的，策略应该配置为：允许使用企业中批准的标准方法进行软件更新和升级。对于Linux来说，我们有一个策略规则允许这样的操作：当使用apt命令或者unattended-upgrades执行dpkg时。因此，所有10K+的文件下载被标注为良性，而SLEUTH也没有产生警报</p>
+<h2 id="75-运行时间和内存使用"><a class="markdownIt-Anchor" href="#75-运行时间和内存使用"></a> 7.5 运行时间和内存使用</h2>
+<p>测试环境是搭载2.8GHz AMD Opteron 62xx 处理器和48GB主存的Ubuntu 16.04</p>
+<p><img src="https://img-blog.csdnimg.cn/2020021210073572.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /><br />
+例如L-2，SLEUTH使用了大约329MB内存来存储跨越3.5天所产生的38.5M的事件。在大数据集中，SLEUTH只需要8 bytes内存来存储每个事件；而小数据集中需要20 bytes.（why ？）</p>
+<p>第四行展示了总运行时间，包括<strong>消耗数据集、构建依赖图、检测攻击、重建攻击场景</strong>。由于我们使用了标记，因此分析所需的大部分信息都可以在本地获得。这是我们性能提升的主要原因。</p>
+<p>“Speed-up”一栏说明了SLEUTH的性能优势。它是SLEUTH可以同时处理的数据流的数量，如果CPU的使用是唯一的限制的话。</p>
+<h2 id="76-为数据和代码分别分配标签的好处"><a class="markdownIt-Anchor" href="#76-为数据和代码分别分配标签的好处"></a> 7.6 为数据和代码分别分配标签的好处</h2>
+<p>通过在代码可信度上进行检测和前向分析，可以削减掉大量的警报，极大减小前向分析输出的规模。</p>
+<p>下图展示了使用单个的可信度标签和分离可信度标签（code/data）时，所产生报警数目的不同，注意到在一些情况下，报警数量减少了100-1000倍：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200212100840901.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<p>下图展示了因为标签的分割，前向分析所达到的提升。前向分析的输出被输入到<strong>简化引擎</strong>中，结果如第六行所示；Total列是Split t-tag和SLEUTH Simplification共同作用的结果。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200212100827604.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Alston</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="/alst0n.site/2020/02/21/PaperNote-SLEUTH%EF%BC%9A%E5%9F%BA%E4%BA%8ECOTS%E5%AE%A1%E8%AE%A1%E6%95%B0%E6%8D%AE%E7%9A%84%E5%AE%9E%E6%97%B6%E6%94%BB%E5%87%BB%E5%9C%BA%E6%99%AF%E9%87%8D%E6%9E%84/">alst0n.site/2020/02/21/PaperNote-SLEUTH%EF%BC%9A%E5%9F%BA%E4%BA%8ECOTS%E5%AE%A1%E8%AE%A1%E6%95%B0%E6%8D%AE%E7%9A%84%E5%AE%9E%E6%97%B6%E6%94%BB%E5%87%BB%E5%9C%BA%E6%99%AF%E9%87%8D%E6%9E%84/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="alst0n.site">Alston's blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%A7%91%E7%A0%94/">科研</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2020/02/21/PaperNote-%E5%9F%BA%E4%BA%8E%E9%AB%98%E6%95%88%E6%95%B0%E6%8D%AE%E6%B5%81%E6%A0%87%E8%AE%B0%E5%92%8C%E8%B7%9F%E8%B8%AA%E7%9A%84%E5%8F%AF%E7%B2%BE%E7%82%BC%E8%B7%A8%E4%B8%BB%E6%9C%BA%E6%94%BB%E5%87%BB%E8%B0%83%E6%9F%A5/"><i class="fa fa-chevron-left">  </i><span>PaperNote-基于高效数据流标记和跟踪的可精炼跨主机攻击调查</span></a></div><div class="next-post pull-right"><a href="/2020/02/21/PaperNote-HOLMES%EF%BC%9A%E5%9F%BA%E4%BA%8E%E5%8F%AF%E7%96%91%E4%BF%A1%E6%81%AF%E6%B5%81%E7%9A%84%E5%AE%9E%E6%97%B6APT%E6%A3%80%E6%B5%8B/"><span>PaperNote-HOLMES：基于可疑信息流的实时APT检测</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer class="footer-bg" style="background-image: url(https://desk-fd.zol-img.com.cn/t_s960x600c5/g2/M00/0A/0A/ChMlWlz3U4OIPcZQAAzptvLfCWMAAKkVgN3Z6YADOnO861.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2020 By Alston</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script src="/js/search/local-search.js"></script><script id="ribbon" src="/js/third-party/canvas-ribbon.js" size="150" alpha="0.6" zIndex="-1" data-click="false"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"live2d-widget-model-hibiki"},"display":{"superSample":2,"width":100,"height":220,"position":"right","hOffset":10,"vOffset":10},"log":false,"tagMode":false});</script></body></html>

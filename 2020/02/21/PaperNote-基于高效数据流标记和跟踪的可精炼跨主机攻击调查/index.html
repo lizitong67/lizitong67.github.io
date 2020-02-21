@@ -1,0 +1,274 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="PaperNote-基于高效数据流标记和跟踪的可精炼跨主机攻击调查"><meta name="keywords" content="科研"><meta name="author" content="Alston"><meta name="copyright" content="Alston"><title>PaperNote-基于高效数据流标记和跟踪的可精炼跨主机攻击调查 | Alston's blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><canvas class="fireworks"></canvas><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-摘要"><span class="toc-text"> 1 摘要</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-介绍"><span class="toc-text"> 2 介绍</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#21-主要贡献"><span class="toc-text"> 2.1 主要贡献</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-背景"><span class="toc-text"> 3 背景</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#31-执行程序日志"><span class="toc-text"> 3.1 执行程序日志</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#32-记录和重放"><span class="toc-text"> 3.2 记录和重放</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#33-dift"><span class="toc-text"> 3.3 DIFT</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-攻击实例和挑战"><span class="toc-text"> 4 攻击实例和挑战</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#41-攻击实例"><span class="toc-text"> 4.1 攻击实例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#42-挑战"><span class="toc-text"> 4.2 挑战</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-概述"><span class="toc-text"> 5 概述</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-威胁模型和假设"><span class="toc-text"> 6 威胁模型和假设</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-标签系统"><span class="toc-text"> 7 标签系统</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#71-表示数据流和因果关系tag-overlay"><span class="toc-text"> 7.1 表示数据流和因果关系（tag overlay）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#72-跨主机可达性分析修剪"><span class="toc-text"> 7.2 跨主机可达性分析（修剪）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#73-解耦标签依赖local-tags"><span class="toc-text"> 7.3 解耦标签依赖（local tags）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#74-切换全局和本地标签"><span class="toc-text"> 7.4 切换全局和本地标签</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#75-最佳本地标签分配"><span class="toc-text"> 7.5 最佳本地标签分配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#76-标签关联"><span class="toc-text"> 7.6 标签关联</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#77-查询系统正反向分析"><span class="toc-text"> 7.7 查询系统（正反向分析）</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-实施"><span class="toc-text"> 8 实施</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-评估"><span class="toc-text"> 9 评估</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#91-攻击场景"><span class="toc-text"> 9.1 攻击场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#92-性能"><span class="toc-text"> 9.2 性能</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-相关工作"><span class="toc-text"> 10 相关工作</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#11-进一步理解"><span class="toc-text"> 11 进一步理解</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://pic4.zhimg.com/80/v2-1b0d0240350e3d8e0550845b6bdaad1e_hd.jpg"></div><div class="author-info__name text-center">Alston</div><div class="author-info__description text-center">计算机硕士在读</div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">37</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">11</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接</div><a class="author-info-links__name text-center" href="https://blog.csdn.net/Sc0fie1d" target="_blank" rel="noopener">CSDN</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://desk-fd.zol-img.com.cn/t_s960x600c5/g2/M00/0A/0A/ChMlWlz3U4OIPcZQAAzptvLfCWMAAKkVgN3Z6YADOnO861.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Alston's blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">PaperNote-基于高效数据流标记和跟踪的可精炼跨主机攻击调查</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-02-21</time><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">7.9k</span><span class="post-meta__separator">|</span><span>阅读时长: 24 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>原文标题：Enabling Refinable Cross-Host Attack Investigation with Efficient Data Flow Tagging and Tracking</p>
+<p>原文作者：Yang Ji, Sangho Lee, Mattia Fazzini, Joey Allen, Evan Downing, Taesoo Kim, Alessandro Orso, and Wenke Lee, Georgia Institute of Technology</p>
+<p>原文来源：USENIX 2018</p>
+<p>原文链接：<a href="https://www.usenix.org/system/files/conference/usenixsecurity18/sec18-ji.pdf" target="_blank" rel="noopener">https://www.usenix.org/system/files/conference/usenixsecurity18/sec18-ji.pdf</a></p>
+<p>相关名词：</p>
+<ul>
+<li>reachability analysis：对Provenance Graph进行修剪</li>
+<li>Interfering parts：涉及攻击的攻击部分</li>
+<li>point-to-point analysis：前向/反向分析中数据流的特定路径，query类型之一</li>
+<li>query：分析人员发出query，RTAG根据query类型返回结果</li>
+<li>symbols：subjects/objects</li>
+</ul>
+<h1 id="1-摘要"><a class="markdownIt-Anchor" href="#1-摘要"></a> 1 摘要</h1>
+<p>调查跨越许多主机的攻击通常具有挑战性。来自不同主机的安全敏感文件、网络终端和内存对象之间真实依赖关系，很容易被依赖爆炸或者未定义的程序行为（比如memory corruption内存损坏）所掩盖。</p>
+<p><strong>动态信息流追踪技术</strong>（Dynamic information flow tracking (DIFT)）仅仅能够追踪单个主机上的信息流，而且在多台主机之间维护和同步数据流标签缺乏一个有效的机制。</p>
+<p>本文提出的方法叫做<strong>RTAG</strong>，这是一种有效的<strong>数据流标记和追踪机制</strong>，可以用于实际的<strong>跨主机</strong>环境下的攻击调查。RTAG的创新技术具有以下三点：</p>
+<ul>
+<li><strong>记录和重放（record-and-replay）</strong>：它将不同数据流标签之间的依赖关系从分析中解耦出来，从而在不同主机的独立和并行DIFT实例之间实现延迟同步。</li>
+<li>利用<strong>系统调用</strong>级的起源信息来计算和分配内存消耗方面的最优<strong>标签映射</strong>。</li>
+<li><strong>将标签信息嵌入到网络数据包中</strong>，从而实现跨主机的数据流追踪，且网络带宽开销小于0.05%。</li>
+</ul>
+<p>通过实验验证，RTAG能够恢复跨主机攻击场景的真实数据流。性能方面，RTAG能在基于DIFT分析方法的基础上，内存消耗最多减少90%；整体分析时间与之前的分析系统相比减少60% - 90%</p>
+<h1 id="2-介绍"><a class="markdownIt-Anchor" href="#2-介绍"></a> 2 介绍</h1>
+<p>现存的攻击调查系统：</p>
+<ul>
+<li>一些通过监控<strong>系统调用</strong>级别或者<strong>指令</strong>级别的事件在每台主机上分析攻击，而<strong>忽略了跨主机</strong>的攻击</li>
+<li>一些<strong>着眼于跨主机</strong>情景下，多主机之间的交互，但是因为他们<strong>缺乏系统调用级别</strong>的信息，所以他们的分析可能会导致<strong>依赖爆炸</strong>问题</li>
+</ul>
+<p>不同解决方案及其优缺点：</p>
+<ul>
+<li><strong>使用粗粒度信息（如系统调用）</strong>：其性能开销很小，但是即使是在单主机环境下，它也不能准确地追踪依赖爆炸和未定义的程序行为（如memory corruption）</li>
+<li>如果<strong>使用网络会话将不同主机上的粗粒度信息联系起来</strong>：会包含太多的错误依赖</li>
+<li><strong>使用细粒度信息（如来自DIFT的指令级别信息）</strong>：会解决准确度问题，但是将会增加开销</li>
+<li><strong>跨主机DIFT机制</strong>：在运行时，在网络数据包中使用元数据（标签）并关联它们，也会是巨大的性能下降</li>
+</ul>
+<p>因此，我们提出了<strong>RTAG</strong>系统：<strong>基于记录和重放的数据流标记和追踪系统</strong>。</p>
+<p>使用记录和重放来进行跨主机的信息流分析带来了新的<strong>挑战</strong>：</p>
+<ul>
+<li><strong>分析时间</strong>：DIFT分析需要以一种同步的方式，在不同主机之间传输分析数据（如标签）</li>
+<li><strong>内存消耗</strong>：多个DIFT实例的内存消耗是巨大的，尤其是不同主机上的多个进程交互时</li>
+</ul>
+<p>为了解决这两个挑战，RTAG通过<strong>标签覆盖</strong>和<strong>标签切换</strong>技术<strong>将标签依赖从分析中解耦出来</strong>，并且时DIFT独立于由通信所决定的任何特定顺序。这使得DIFT分析可以在多主机、多进程并行的环境下运行。此外，RTAG通过设计<strong>标签映射数据结构</strong>减少了内存消耗，<strong>标签映射数据结构用于追踪标签和关联值之间的关系。</strong>（不懂）</p>
+<p>评估结果表明分析时间降低了60% - 90%，内存消耗最大减少了90%。<strong>评估环境使用了真实跨主机攻击场景，包括GitPwn和SQL注入</strong>。</p>
+<h2 id="21-主要贡献"><a class="markdownIt-Anchor" href="#21-主要贡献"></a> 2.1 主要贡献</h2>
+<ul>
+<li><strong>可精炼的跨主机调查标签系统</strong>：RTAG解决了“标签依赖耦合”问题，它<strong>将标签依赖解耦合</strong>，避免在重放DIFT上进行容易出错的编排工作，并使DIFT能够独立地并行执行</li>
+<li><strong>DIFT运行优化</strong>：在重放阶段，优化了运行时间和内存。运行时间优化是通过<strong>并行运行DIFT任务</strong>；内存优化是基于<strong>系统调用级别的可达性分析</strong>，为DIFT分配<strong>最佳标签大小</strong></li>
+</ul>
+<h1 id="3-背景"><a class="markdownIt-Anchor" href="#3-背景"></a> 3 背景</h1>
+<h2 id="31-执行程序日志"><a class="markdownIt-Anchor" href="#31-执行程序日志"></a> 3.1 执行程序日志</h2>
+<p><strong>Data Granularity</strong>：Granularity refers to “the level of detail or summarisation of the units of data in the data warehouse”. The low level of granularity contains high level of detail and the high level of granularity contains low level of detail.</p>
+<ul>
+<li>使用<strong>高粒度数据</strong>，如系统调用，开销低，准确度低</li>
+<li>使用<strong>低粒度数据</strong>，如指令，准确度高，开销大</li>
+<li>结合上述二者，使用<strong>记录和重放</strong>，在记录程序运行时，执行高级别的日志记录和分析；在重放程序运行时，执行低级别的日志记录和分析</li>
+</ul>
+<h2 id="32-记录和重放"><a class="markdownIt-Anchor" href="#32-记录和重放"></a> 3.2 记录和重放</h2>
+<p>该技术的目的是记录软件执行时的信息，并利用存储的信息，<strong>重新执行软件并重构程序状态</strong>，其执行路径跟初次执行时一样。</p>
+<p>根据执行记录重放任务系统的层次，进行以下分类：</p>
+<ul>
+<li><strong>在用户层执行程序</strong>：在重放阶段效率较高，因为它可以直接将注意力放在特定程序的记录信息上，然而这种技术需要程序源码或者二进制代码，或者需要额外的空间来记录通信程序的执行(特别是通过文件系统)，因为记录的信息要存储多次。</li>
+<li>通过<strong>观察操作系统的行为</strong>来进行记录和重放：通过管理程序（hypervisor）或仿真来监视OS，在存储信息方面非常高效，然而即便是在只有一个程序是与攻击相关的情况下，该方法也得将所有程序重放一遍。</li>
+<li><strong>前两种方式的融合</strong>：在OS级别记录信息，在用户级别重放。</li>
+</ul>
+<h2 id="33-dift"><a class="markdownIt-Anchor" href="#33-dift"></a> 3.3 DIFT</h2>
+<p>DIFT是一种在执行程序内分析数据流的技术，具体包括以下几点：</p>
+<ul>
+<li>用“标签”标记程序中感兴趣的value</li>
+<li>通过处理指令传播标签</li>
+<li>在程序执行中的某些特定的点，检查与value相关联的标签</li>
+</ul>
+<p>该技术可以准确地判断程序的两个value之间是否有关联。然而，因为它需要对每个执行指令进行额外的操作，因此会有较大的开销。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200215230551658.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<p>上图比较了序列化的DIFTs（串行）和RTAG加持的并行DIFTs；</p>
+<ul>
+<li>(a) 展示了在服务器上的ssh守护进程和另一台主机上的ssh客户端，两者都遵循相同的标签依赖（<strong>标签依赖在记录阶段被记录下来，DIFTs用它进行重放</strong>）</li>
+<li>(b) 中RTAG使用标签切换、分配和关联技术，将标签依赖从程序重放中解耦出来，从而使得每个进程在线下分析时可以并行</li>
+</ul>
+<h1 id="4-攻击实例和挑战"><a class="markdownIt-Anchor" href="#4-攻击实例和挑战"></a> 4 攻击实例和挑战</h1>
+<h2 id="41-攻击实例"><a class="markdownIt-Anchor" href="#41-攻击实例"></a> 4.1 攻击实例</h2>
+<p>攻击实例使用GitPwnd，其行动包括多主机的文件窃取。链接：<a href="https://github.com/nccgroup/gitpwnd" target="_blank" rel="noopener">https://github.com/nccgroup/gitpwnd</a>.</p>
+<p>在服务器端使用<a href="https://www.gitolite.com" target="_blank" rel="noopener">gitolite</a>，在客户端使用git。</p>
+<h2 id="42-挑战"><a class="markdownIt-Anchor" href="#42-挑战"></a> 4.2 挑战</h2>
+<p><strong>跨主机的数据流追踪所面临的挑战是：同时满足准确度和效率。</strong></p>
+<p>目前支持跨主机的数据流捕获系统，在运行时使用DIFT，它在程序执行的主机和另外的主机之间传播标签，而不会丢弃任何标签和他们之间的依赖关系。然而这样的系统会有很大的开销。</p>
+<p>为了同时满足准确度和效率，<strong>可精炼的系统（refinable system）<strong>首先记录每个程序的执行过程，然后使用DIFT有选择性地（与攻击相关）重放它们。然而，目前的refinable system面临的挑战是</strong>标签依赖性问题</strong>：也就是说，<strong>这种系统需要进行重放，但是在重放过程中，如果不同重放进程的标签之间存在依赖关系，那么重放必须按照与记录相同的顺序来进行。所以这种必须按顺序执行的方式就要求，DIFT任务们必须等待其上游的DIFTs来更新它们所依赖的标签，在我们所面临的多主机场景下，这种挑战更加明显</strong>（精辟啊！！理解解耦的意思了嘛？）。</p>
+<p>下面时GitPwnd的一个例子，来形象地阐述这种挑战。在服务器端，需要暂停sshd的重放，等待客户端的ssh-client的重放，以完成流量在Tagmap中的传播结果。此外，sshd将使用此流量作为ssh协议响应来回应ssh，这意味着需要暂停ssh的重放并等待sshd。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200215230603189.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<p>当存在多个通信参与者时，这种挑战就更加严重了。例如，在一个P2P的文件共享系统中执行搜索和下载文件操作，我们需要在每个节点上编排P2P客户客户端的重放工作，当面对成千上百个节点是，这是非常不切实际的。</p>
+<p>为了解决这个问题，本文提出的RTAG，使用<strong>符号化标签</strong>(symbolized tags) 为每个独立的DIFT实例分配合适大小的标签，将标签依赖从重放过程中解耦出来。</p>
+<h1 id="5-概述"><a class="markdownIt-Anchor" href="#5-概述"></a> 5 概述</h1>
+<p>RTAG，将标签依赖从分析过程中（DIFT任务）解耦出来，使得DIFT独立于任何特定的顺序，允许为不同主机上不同进程并行运行DIFT，在离线分析时，这种独立性避免了按照特定顺序实时的复杂性。</p>
+<ul>
+<li><strong>标签覆盖</strong>（tagging overlay）：RTAG在传统的<strong>起源图</strong>（provenance）上维护一个<strong>标签覆盖</strong>（tagging overlay），从而独立准确地进行标签管理</li>
+<li><strong>标签切换</strong>（tag switch）：用于交换跨<strong>主机唯一的全局标签</strong>（global tag）和对<strong>DIFT实例唯一的本地标签</strong>（local tag）。为每个DIFT实例使用一个本地标签，这可以解开标签之间的耦合，因为之前时不同的DIFT任务共享这些标签的。DIFT完成后，RTAG将<strong>本地符号</strong>（local symbol？）切换回它原来的全局标记。</li>
+<li><strong>Version</strong>：在某段数据的标签更新不止一次的时候，为了确保标签及其传播不会丢失，RTAG根据系统范围内的写操作，跟踪数据的每个更改(version)。每段数据版本都有它自己的标签，每个标签值的版本都会被正确地传播到其他的数据片段。</li>
+</ul>
+<p>（不懂）RTAG不仅可以通过独立运行DIFT使分析速度得到提升，而且会减少内存消耗。我们使用最佳的符号大小，为每个DIFT分配本地符号，这足以表示涉及内存重叠的数据的<strong>熵</strong>（entropy）。</p>
+<ul>
+<li><strong>标签关联</strong>（tag association）：映射主机之间字节级的数据收发，这有助于识别跨主机的标签传播。</li>
+</ul>
+<h1 id="6-威胁模型和假设"><a class="markdownIt-Anchor" href="#6-威胁模型和假设"></a> 6 威胁模型和假设</h1>
+<p>本文的目标：<strong>通过DIFT建立一个可精炼的跨主机攻击调查系统</strong>。</p>
+<p>文章所使用的威胁模型：攻击者有机会远程接入受害者网络，尝试窃取敏感数据，并在主机之间传播错误信息（如篡改数据）。</p>
+<p>本文的<strong>可信计算基础</strong>（trusted computing base，TCB）包括内核、存储、网络。</p>
+<p>假设：</p>
+<ul>
+<li>在RTAG启动之后攻击才发生</li>
+<li>硬件攻击不在本文考虑范围之内</li>
+<li>攻击者不会攻击RTAG本身和操作系统，不会篡改RTAG所用到的数据（通过安全日志机制实现，或者将数据存在远程分析服务器上）</li>
+<li>攻击者不会篡改主机之间传播的数据包载荷</li>
+</ul>
+<h1 id="7-标签系统"><a class="markdownIt-Anchor" href="#7-标签系统"></a> 7 标签系统</h1>
+<h2 id="71-表示数据流和因果关系tag-overlay"><a class="markdownIt-Anchor" href="#71-表示数据流和因果关系tag-overlay"></a> 7.1 表示数据流和因果关系（tag overlay）</h2>
+<p>为了追踪跨主机的不同文件或网络数据流，我们建立了一个<strong>标签模型</strong>，它作为一个<strong>覆盖图</strong>（overlay graph）覆盖在现有的起源图之上。</p>
+<p>在覆盖图内，RTAG将全局唯一的标签和感兴趣文件相关联，以字节级别（<strong>byte-level</strong>）的粒度来追踪它们的起源和流动。标签使得RTAG可以反向追踪文件的起源，包括从远端主机传来的文件；还能够前向追踪文件造成的影响，也可以包括传向远端主机的文件。（SLEUTH中的回溯分析取证和前向影响性分析）</p>
+<p>起源图需要追踪以下的信息流：</p>
+<ul>
+<li>从进程到文件</li>
+<li>从进程到另一个进程</li>
+<li>从文件到进程</li>
+</ul>
+<p>起源图中的边表示两个节点之间的事件（如进程节点从文件节点读数据的一个系统调用）</p>
+<p>在标签覆盖图（overlay tag graph）中，文件的每个<strong>字节</strong>都对应一个<strong>标签键</strong>（tag key），用于唯一标识这一字节。每个标签键都与此键的原始值向量相关联。通过递归检索键的值，可以获得从这个数据字节开始的所有上游起始点，该点以树的形式扩展到远程主机上的起始点。相反，通过递归检索值的标签键，分析人员能够在树状图中找到所有影响，包括远程主机上的影响。（正向与反向分析）下图是一个例子：<br />
+<img src="https://img-blog.csdnimg.cn/20200215230638218.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<p>RTAG需要在每台主机的文件系统，<strong>使用全局标签（global tag）来唯一标识数据的每个字节</strong>。出于这个需要，我们使用mac地址来标识主机，使用inode、dev、crtime来标识文件，使用偏移量（offset）来标识文件中<strong>字节级</strong>的偏移量。例如，mac地址占48 bits，inode、dev、crtime分别占64、32、32 bits，偏移量占32 bits，可支持的文件大小就是4GB（offset=32，2的32次方字节），全局标签的总大小就是208 bits。</p>
+<h2 id="72-跨主机可达性分析修剪"><a class="markdownIt-Anchor" href="#72-跨主机可达性分析修剪"></a> 7.2 跨主机可达性分析（修剪）</h2>
+<p><strong>RTAG遵循<a href="https://dl.acm.org/doi/pdf/10.1145/3133956.3134045?download=true" target="_blank" rel="noopener">RAIN</a>的可达性分析设计，并且将其扩展至可以处理跨主机的场景</strong>。</p>
+<p>给定一个起始点，RTAG通过削减原始的起源图，以提取与指定攻击相关的子图，该子图包含进程和文件/网络流之间的因果关系。RTAG依赖于此子图中的<strong>粗粒度数据流</strong>来维护标签覆盖，同时执行标签切换和最优分配。</p>
+<p>（不懂。分析内存重叠的不可达情况？？）可达性分析首先遵循基于时间的数据流，以了解攻击中涉及的潜在过程。接下来，它捕获每个进程内部文件或网络的输入/输出的<strong>内存重叠</strong>(拷贝的目的地址在源地址范围内。所谓内存重叠就是拷贝的目的地址和源地址有重叠。)，并将它们标记为“干扰”，由DIFT进行处理。在干扰信息准确的情况下，重放和DIFT被快速转发到干扰开始处(例如，read系统调用)，并在干扰结束处提前终止(例如，write系统调用)。</p>
+<p>对于跨主机的网络通信，RTAG通过socket来练习数据流。进一步，RTAG通过TCP和UDP协议的套接字通信进一步跟踪字节级别的数据传输，这使得扩展跨主机的标记传播成为可能</p>
+<p>由于RTAG从记录的文件/网络 IO 系统调用中获得了关于源和目的信息，因此可以为每个独立的DIFT任务分配最优的标签大小。</p>
+<p>另外，此外，为了<strong>避免丢失</strong>由不同进程执行的、对同一资源的<strong>中间标签更新</strong>，RTAG监视对文件的相同偏移量的“<strong>覆盖</strong>”操作，并<strong>跟踪这个版本信息</strong>，因此它准确地知道应该在传播中使用哪个版本的标签。</p>
+<h2 id="73-解耦标签依赖local-tags"><a class="markdownIt-Anchor" href="#73-解耦标签依赖local-tags"></a> 7.3 解耦标签依赖（local tags）</h2>
+<p>RTAG的目标是<strong>使用DIFT进行离线重放</strong>，而不增加程序运行的开销。为了使其支持跨主机环境，我们要解决的问题是如何协调不同主机上的重放程序，来追踪他们之间的标签依赖。解决方案是将标签依赖从每个进程重放过程中解耦出来，为此我们为每个DIFT使用<strong>本地标签</strong>（local tags）（也就是符号化symbolized），这需要在写作操的之前和之后来区别标签的变化，并且向其它相关的标签同步这些变化。换句话说，RTAG需要在每次IO操作之后，追踪每个标签的原始版本的动态变化（标签的多个版本）。</p>
+<p>用下图GitPwnd的例子来说明：<br />
+<img src="https://img-blog.csdnimg.cn/20200215230653635.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<p>（<strong>详解GitPwnd</strong>）client-hook守护进程持续从不同的文件读取数据，并保存在result文件中。同时，当受害之执行git commit操作时，git packet应用从results文件进行复制，然后通过pipe IPC（Inter-Process Communication）用SSH发送出去。为了正确地分辨下列两个数据流：</p>
+<ul>
+<li>id_rsa→results→pipe</li>
+<li>/etc/passwd→results→pipe</li>
+</ul>
+<p>RTAG需要为results维护两个版本的标签，client-hook上的DIFT为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mi>d</mi><mi mathvariant="normal">_</mi><mi>r</mi><mi>s</mi><mi>a</mi></mrow><annotation encoding="application/x-tex">id\_rsa</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.00444em;vertical-align:-0.31em;"></span><span class="mord mathdefault">i</span><span class="mord mathdefault">d</span><span class="mord" style="margin-right:0.02778em;">_</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">s</span><span class="mord mathdefault">a</span></span></span></span>存储的表示其来源的标签为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi><mi>e</mi><mi>s</mi><mi>u</mi><mi>l</mi><mi>t</mi><mi>s</mi><mi mathvariant="normal">.</mi><mi>v</mi><mn>1</mn></mrow><annotation encoding="application/x-tex">results.v1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">e</span><span class="mord mathdefault">s</span><span class="mord mathdefault">u</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">t</span><span class="mord mathdefault">s</span><span class="mord">.</span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="mord">1</span></span></span></span>，为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>e</mi><mi>t</mi><mi>c</mi><mi mathvariant="normal">/</mi><mi>p</mi><mi>a</mi><mi>s</mi><mi>s</mi><mi>w</mi><mi>d</mi></mrow><annotation encoding="application/x-tex">etc/passwd</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">e</span><span class="mord mathdefault">t</span><span class="mord mathdefault">c</span><span class="mord">/</span><span class="mord mathdefault">p</span><span class="mord mathdefault">a</span><span class="mord mathdefault">s</span><span class="mord mathdefault">s</span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mord mathdefault">d</span></span></span></span>存储的表示其来源的标签为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi><mi>e</mi><mi>s</mi><mi>u</mi><mi>l</mi><mi>t</mi><mi>s</mi><mi mathvariant="normal">.</mi><mi>v</mi><mn>2</mn></mrow><annotation encoding="application/x-tex">results.v2</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">e</span><span class="mord mathdefault">s</span><span class="mord mathdefault">u</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">t</span><span class="mord mathdefault">s</span><span class="mord">.</span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="mord">2</span></span></span></span>（图中用红色虚线表示）；因此git pack上的DIFT可以分辨 git:ssh 数据的来源：</p>
+<ul>
+<li>偏移量为0来自 results.v1，也就是来自 id_rsa</li>
+<li>偏移量为1024来自 results.v2，也就是来自 etc/passwd</li>
+</ul>
+<p>更重要的是，这个时候client-hook和git pack上的DIFT任务就可以独立执行了，而不会由于在results文件上的重写而导致中间标签值的丢失。</p>
+<p>为了更加方便地支持这种标签化，我们附加了一个32位的<strong>版本字段</strong>（version field），用来表示文件中有关文件IO操作的数据的版本。仅仅在由可达性分析所决定的的数据干扰出现时，才会使用版本字段。通过实验，我们为版本字段分配32 bits的长度，可以在500天的实验环境中精确找出IO 系统调用。</p>
+<p>（知识点补充）hook系统调用：其实就是修改内核符号表，来达到一个劫持的作用。因为系统调用实际上是触发了一个0x80的软中断，然后转到了系统调用处理程序的入口system_call()。system_call()会检查系统调用号来得出到底是调用哪种服务，然后会根据内核符号表跳转到所需要调用的内核函数的入口地址，所以，如果我们这个时候修改了内核符号表，使其跳转到我们自己的函数上，就可以完成劫持。</p>
+<h2 id="74-切换全局和本地标签"><a class="markdownIt-Anchor" href="#74-切换全局和本地标签"></a> 7.4 切换全局和本地标签</h2>
+<p>7.1节中定义的全局标签，足以在多主机环境下，表示特定版本文件的某个字节。但是为每个DIFT任务分配全局标签，实际上是一种浪费，因为RTAG的每个DIFT任务仅覆盖一个进程组，因此确保进程组级唯一性的本地标签就足够了。因此，对于每个DIFT任务，我们<strong>基于其源符号的熵</strong>（what？）使用不同的标签大小。 在进行DIFT之前，RTAG将标签从全局标签切换到本地标签，并在完成DIFT后将标签切换回全局标签。  DIFT的标签是本地的，因为它仅需要唯一地标识当前<strong>进程内DIFT</strong>（in-process DIFT）中源的每个字节，而不是标识跨主机的数据字节。</p>
+<p>进一步，每个DIFT中源的数量取决于可达性分析，通常会由数据修剪而极大的减少。换句话说，本地标签的大小取决于干扰（interference）情况。（干扰越多，也就是可达数据越少，有效的数据越少，就可以用更小的local tag来表示）。因此，本地标签的<strong>信息熵</strong>要远小于全局标签。举个例子来说，如果一个程序仅从DIFT中标记为源的文件那里读取10个字节，那么本地标签仅用4 bits就可以将其表示，这与全局标签的208 bits相比简单了不少。</p>
+<p>标签的大小不仅会影响源和目的的symbol，还会影响所有中间存储器和寄存器，因为标签会根据DIFT的传播策略，随每个指令的执行一起被复制，合并或更新。<strong>标签大小；影响整个标签映射的内存成本</strong>，<strong>所以标签切换显着降低了DIFT的总体内存成本</strong>。（本节主旨）</p>
+<h2 id="75-最佳本地标签分配"><a class="markdownIt-Anchor" href="#75-最佳本地标签分配"></a> 7.5 最佳本地标签分配</h2>
+<ul>
+<li>采用记录-重放机制的原因：</li>
+</ul>
+<p>现存的DIFT引擎系统是在程序运行时工作的，事先不了解关于数据的源或者目的地的信息，所以要为其分配一个固定大小的标签，以确保其足够大。这样就会消耗大量的系统资源。</p>
+<p>相比于在程序运行时执行DIFT，RTAG采用的是记录 - 重放机制，这样，在重放阶段实施DIFT时，关于数据源和目的的信息就已知了。这样，我们就可以动态调节标签大小，而不是采用固定大小的标签了。</p>
+<p>下图比较了不同DIFT引擎标签映射的内存消耗情况：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200215230708134.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<ul>
+<li><strong>操作过程</strong>：</li>
+</ul>
+<p>在执行DIFT之前，RTAG会计算最佳本地标签来标记源，并在将源加载到进程的内存空间时（例如，通过read() 系统调用）将全局标签替换为本地标签。 在执行DIFT时，当内存单元或寄存器因为某些标签被污染（恶意）时，RTAG会为中间位置（中间态？）分配标签。 当传播到达目的地时（例如，通过write() 系统调用），RTAG将本地标签替换为原始的全局标签，并更新目的地的标签值。</p>
+<h2 id="76-标签关联"><a class="markdownIt-Anchor" href="#76-标签关联"></a> 7.6 标签关联</h2>
+<p>为了追踪不同主机之间的数据流，我们还附加了操作内核的<strong>hook the socket</strong>处理，以启用跨主机标记（cross-host tagging）。本文提出了一种 “in-band” 的方法，在主机之间追踪数据流，这种方法尤其适合系统层面的可达性分析和DIFT。</p>
+<p>本文设计的跨主机的标签方法依赖于socket协议的特征：TCP和UDP</p>
+<ul>
+<li>TCP：可靠传输，我们依赖TCP连接中字节的顺序，从而可以在字节层面识别数据流。注意到，尽管TCP控制着数据流的顺序，但是发送发和接收方之间在接受和发送数据的时候，可能运行着不同数目的系统调用。举个例子，发送方可能执行五个writev（）系统调用以发送10,000字节的数据（每个调用2,000字节），而接收方可以进行10个read（）调用（每个调用1,000字节）以检索完整的数据。 这就是为什么需要对发送或接收的字节进行计数，而不是对系统调用数进行计数的原因。</li>
+<li>UDP：不可靠传输，在传输过程中可能会丢包。因此，我们不能依赖传输字节的顺序，因为目标主机不知道应该到达哪些数据以及丢失了哪些数据。 为了支持UDP，我们在源主机的每个发送相关系统调用中嵌入了一个小的**“跨主机”标签**，并在目标主机的接收相关系统调用中解析了该标签。 在计算校验和之前，将标签作为用户数据报的一部分插入到数据报的开头。 如果数据报传输成功，RTAG就会知道从源到目的的数据长度。 如果目标主机发现接收到的数据报已损坏或完全丢失，它将丢弃该数据报，因此RTAG也意识到丢失的情况，并从可达性分析和DIFT中清除了该入站数据。 评估显示，TCP情况的通信成本为0，而UDP的成本在基准测试中也很微不足道。</li>
+</ul>
+<p>跨主机标签表示跨主机的两个进程之间的套接字通信中的字节级数据。 每个<strong>标签键</strong>（tag key）使用源和目的进程凭证，代表一个套接字会话中的数据流量；使用偏移量来标识字节层面的数据。</p>
+<p>对于会话的唯一性，我们使用进程标识符（pid）和进程创建时间来标识每个进程。</p>
+<p>（不懂）<strong>标签值</strong>（tag value）表示标签键的来源，其由DIFT决定，并且更新为全局标签图（global tag map）。</p>
+<p>对于跨主机的标签，我们同样在执行DIFT之前进行切换，然后在之后进行恢复。（不还是切换全局和本地标签嘛?）</p>
+<ul>
+<li>处理进程内通信：</li>
+</ul>
+<p>RTAG也可以追踪两个进程之间的数据传送（上面讲的是两台host之间的通信）。IPC使用系统调用作为控制接口，RATG通过<strong>hook系统调用</strong>来追踪传送的数据。当进程使用pipe将数据发送到子进程时，RTAG监视读写系统调用以跟踪传输的数据（以字节为单位）。在可达性分析过程中，我们<strong>创建标签键来标记从parent发送到child的每个字节</strong>。 标签值由DIFT实现。 另外，RTAG基于共享内存来追踪IPC，这样就可以在进程的内存单元内，传播此共享内存的标签。 这些过程不需要单独的标签分配。</p>
+<h2 id="77-查询系统正反向分析"><a class="markdownIt-Anchor" href="#77-查询系统正反向分析"></a> 7.7 查询系统（正反向分析）</h2>
+<p>例如，在图中，对攻击者受控主机5.5.5.5:22的<strong>向后查询</strong>（backward query）将返回图（b）中描绘的树形数据流覆盖图。（回溯分析）</p>
+<p><img src="https://img-blog.csdnimg.cn/2020021523083948.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<p>另外，前向查询会从被请求的标签键到它所有的影响，返回数据流的每一个片段。它依赖于反向映射，在该映射中标签键和值被交换以定位文件的下游影响。例如，对客户端的私钥id_rsa的前向查询返回一个流：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200215230852464.png" alt="" /></p>
+<p>通过对这两个节点执行前向和后向查询，然后计算两个结果树的交点，点对点查询可提供起源图中两个节点之间的详细数据流。</p>
+<h1 id="8-实施"><a class="markdownIt-Anchor" href="#8-实施"></a> 8 实施</h1>
+<p>系统实施是基于单主机的<a href="https://dl.acm.org/doi/pdf/10.1145/3133956.3134045?download=true" target="_blank" rel="noopener">RAIN</a>，然后在其基础上<strong>扩展了标签系统</strong>。</p>
+<p>关于追踪Socket连接：</p>
+<ul>
+<li>TCP：使用计数器，通过追踪send/write系统调用的返回值，来计数发送或接受字节的总数</li>
+<li>UDP：在内核函数sendmsg内负载缓冲区的开头，插入一个递增的四字节序号；而不是在类似于send/recv这样的系统调用函数内插入，为的是避免影响用户程序的接口、避免校验和计算。在接收端，在计算完校验和之后，在recvmsg中剥去序列号，得到原始的载荷。（hooking）</li>
+</ul>
+<h1 id="9-评估"><a class="markdownIt-Anchor" href="#9-评估"></a> 9 评估</h1>
+<p>评价目标在于解决以下问题：</p>
+<ul>
+<li>RTAG在跨主机攻击调查中，处理数据流查询时的表现如何，包括前向查询、后向查询、点对点查询</li>
+<li>RTAG对基于DIFT的分析提升了多少效率，包括时间和内存消耗</li>
+<li>RTAG会造成多少带宽和内存消耗</li>
+</ul>
+<h2 id="91-攻击场景"><a class="markdownIt-Anchor" href="#91-攻击场景"></a> 9.1 攻击场景</h2>
+<p>（重要）下图总结了攻击调查中，处理一个query的每个阶段的统计情况：原始的Provenance Graph包含了所有的主机；Pruned Graph中，由可达性分析将与攻击无关边和节点过滤掉（可达性分析用于过滤！）；Data Flow Overlay中，标签存储查询所涉及的每个数据字节的来源。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200215230903983.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<p>下图汇总了每个query所花费的时间和内存：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200215230935213.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<p>评估所用到的场景：</p>
+<ul>
+<li>GitPwnd</li>
+<li>Web-based Attacks：SQLi、CSRF、XSS</li>
+<li>Memory Corruption涉及内存损坏的攻击：整数溢出、缓冲区溢出</li>
+<li>P2P网络中文件的传播：我们还运行RTAG来跟踪P2P网络上恶意文件传播中的数据流，这在分散式文件共享中被视为越来越大的威胁（例子）</li>
+</ul>
+<h2 id="92-性能"><a class="markdownIt-Anchor" href="#92-性能"></a> 9.2 性能</h2>
+<ul>
+<li>
+<p>DIFT性能：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200215230959162.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+</li>
+</ul>
+<p>在RTAG中，总时长消耗取决于最长的DIFT任务，所以还需要继续寻找集成化的进程间并行DIFT技术来进一步降低时间消耗。</p>
+<ul>
+<li>运行时间开销：</li>
+</ul>
+<p>分别用CPU和IO运行时间来衡量。CPU消耗时间如下图所示，结果表明RTAG和RAIN相似，其运行时间开销都比较低。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200215231011167.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<p>IO运行时间消耗如下图所示</p>
+<p><img src="https://img-blog.csdnimg.cn/20200215231021116.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<ul>
+<li>网络性能开销：</li>
+</ul>
+<p>所有的网络开销都可以忽略不计。</p>
+<p><img src="https://img-blog.csdnimg.cn/202002152310303.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<h1 id="10-相关工作"><a class="markdownIt-Anchor" href="#10-相关工作"></a> 10 相关工作</h1>
+<ul>
+<li>DIFT：动态污点分析是一种众所周知的技术，用于在程序运行时逐条指令跟踪信息流指令，而无需依赖程序源文件或二进制文件的语义。  DIFT可用于策略执行，恶意软件分析和检测隐私泄漏。</li>
+<li>Provenance Capturing：使用data provenance来调查APT是比较流行的研究领域。</li>
+<li>Network Provenance：网络层面的provenance也是研究热点。其弱点显而易见，就是无法检测大部分终端上系统层面的因果关系。<strong>但是基于网络和基于主机的Provenance是相互正交的，因此我们可以将二者结合起来。</strong>（妙哇！）</li>
+<li>记录和重放系统：确定性的记录和重放是研究热点，最新的作品还可以记录不确定性的事件。</li>
+<li>未来研究的方向：
+<ul>
+<li>使运行RTAG的主机与不运行系统的主机可互操作。 为此，计划将标签信息嵌入UDP标头的可选字段中</li>
+<li>能够实现在给定网络中，RTAG可能没有运行在每台主机上的情况下，仍可以识别信息流并还原事实</li>
+<li>将进程内（in-precess）的并行DIFT集成到RTAG中，进一步优化运行时间</li>
+<li>减少对不确定性输入的存储空间需要</li>
+<li>扩展RTAG支持的query，以便可以<strong>比较同一程序的不同执行</strong>相关的信息流。 这样，就有可能查明程序何时何地受到威胁。</li>
+</ul>
+</li>
+</ul>
+<h1 id="11-进一步理解"><a class="markdownIt-Anchor" href="#11-进一步理解"></a> 11 进一步理解</h1>
+<ul>
+<li>在provenance graph上构建出tag overlay，然后借助tag overlay的反向分析过程：</li>
+</ul>
+<p><img src="https://s2.ax1x.com/2020/02/21/3u2PvF.png" alt="" /></p>
+<ul>
+<li>本文的重点是讲tag overlay是怎么来的：</li>
+</ul>
+<p><img src="https://s2.ax1x.com/2020/02/21/3u2pCV.png" alt="" /></p>
+<p>在起源图上，为每个数据的每个字节分配global tag，tag switch负责将global tag切换为local tag；tag allocation负责确定最佳大小的local tag；tag association负责关联不同进程、不同主机；同之DIFT在每个进程上并行执行，最后生成tag overlay。</p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Alston</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="/alst0n.site/2020/02/21/PaperNote-%E5%9F%BA%E4%BA%8E%E9%AB%98%E6%95%88%E6%95%B0%E6%8D%AE%E6%B5%81%E6%A0%87%E8%AE%B0%E5%92%8C%E8%B7%9F%E8%B8%AA%E7%9A%84%E5%8F%AF%E7%B2%BE%E7%82%BC%E8%B7%A8%E4%B8%BB%E6%9C%BA%E6%94%BB%E5%87%BB%E8%B0%83%E6%9F%A5/">alst0n.site/2020/02/21/PaperNote-%E5%9F%BA%E4%BA%8E%E9%AB%98%E6%95%88%E6%95%B0%E6%8D%AE%E6%B5%81%E6%A0%87%E8%AE%B0%E5%92%8C%E8%B7%9F%E8%B8%AA%E7%9A%84%E5%8F%AF%E7%B2%BE%E7%82%BC%E8%B7%A8%E4%B8%BB%E6%9C%BA%E6%94%BB%E5%87%BB%E8%B0%83%E6%9F%A5/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="alst0n.site">Alston's blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%A7%91%E7%A0%94/">科研</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2020/02/21/PaperNote-%E5%88%86%E6%9E%90%E5%A4%A7%E9%87%8F%E7%BD%91%E7%BB%9C%E6%B5%81%E9%87%8F%E4%BB%A5%E8%BF%9B%E8%A1%8CAPT%E6%A3%80%E6%B5%8B/"><i class="fa fa-chevron-left">  </i><span>PaperNote-分析大量网络流量以进行APT检测</span></a></div><div class="next-post pull-right"><a href="/2020/02/21/PaperNote-SLEUTH%EF%BC%9A%E5%9F%BA%E4%BA%8ECOTS%E5%AE%A1%E8%AE%A1%E6%95%B0%E6%8D%AE%E7%9A%84%E5%AE%9E%E6%97%B6%E6%94%BB%E5%87%BB%E5%9C%BA%E6%99%AF%E9%87%8D%E6%9E%84/"><span>PaperNote-SLEUTH：基于COTS审计数据的实时攻击场景重构</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer class="footer-bg" style="background-image: url(https://desk-fd.zol-img.com.cn/t_s960x600c5/g2/M00/0A/0A/ChMlWlz3U4OIPcZQAAzptvLfCWMAAKkVgN3Z6YADOnO861.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2020 By Alston</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script src="/js/search/local-search.js"></script><script id="ribbon" src="/js/third-party/canvas-ribbon.js" size="150" alpha="0.6" zIndex="-1" data-click="false"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"live2d-widget-model-hibiki"},"display":{"superSample":2,"width":100,"height":220,"position":"right","hOffset":10,"vOffset":10},"log":false,"tagMode":false});</script></body></html>

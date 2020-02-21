@@ -1,0 +1,211 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Python3爬虫笔记-正则表达式"><meta name="keywords" content="Python"><meta name="author" content="Alston"><meta name="copyright" content="Alston"><title>Python3爬虫笔记-正则表达式 | Alston's blog</title><link rel="shortcut icon" href="/melody-favicon.ico"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><canvas class="fireworks"></canvas><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#常用的匹配规则"><span class="toc-text"> 常用的匹配规则</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-match"><span class="toc-text"> 1 match()</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#11-匹配目标"><span class="toc-text"> 1.1 匹配目标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#12-通用匹配"><span class="toc-text"> 1.2 通用匹配</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#13-贪婪与非贪婪"><span class="toc-text"> 1.3 贪婪与非贪婪</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#14-修饰符"><span class="toc-text"> 1.4 修饰符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#15-转义匹配"><span class="toc-text"> 1.5 转义匹配</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-search"><span class="toc-text"> 2 search()</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-findall"><span class="toc-text"> 3 findall()</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-sub"><span class="toc-text"> 4 sub()</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-compile"><span class="toc-text"> 5 compile()</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://pic4.zhimg.com/80/v2-1b0d0240350e3d8e0550845b6bdaad1e_hd.jpg"></div><div class="author-info__name text-center">Alston</div><div class="author-info__description text-center">计算机硕士在读</div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">37</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">11</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">友情链接</div><a class="author-info-links__name text-center" href="https://blog.csdn.net/Sc0fie1d" target="_blank" rel="noopener">CSDN</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://desk-fd.zol-img.com.cn/t_s960x600c5/g2/M00/0A/0A/ChMlWlz3U4OIPcZQAAzptvLfCWMAAKkVgN3Z6YADOnO861.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Alston's blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">Python3爬虫笔记-正则表达式</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-02-21</time><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">2.1k</span><span class="post-meta__separator">|</span><span>阅读时长: 7 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h1 id="常用的匹配规则"><a class="markdownIt-Anchor" href="#常用的匹配规则"></a> 常用的匹配规则</h1>
+<table>
+<thead>
+<tr>
+<th>模式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>\w</td>
+<td>匹配字母、数字及下划线</td>
+</tr>
+<tr>
+<td>\W</td>
+<td>匹配不是字母、数字及下划线的字符</td>
+</tr>
+<tr>
+<td>\s</td>
+<td>匹配任意空白字符，等价于[\t\n\r\f]</td>
+</tr>
+<tr>
+<td>\S</td>
+<td>匹配任意非空字符</td>
+</tr>
+<tr>
+<td>\d</td>
+<td>匹配任意数字，等价于[0-9]</td>
+</tr>
+<tr>
+<td>\D</td>
+<td>匹配任意非数字的字符</td>
+</tr>
+<tr>
+<td>\A</td>
+<td>匹配字符串开头</td>
+</tr>
+<tr>
+<td>\Z</td>
+<td>匹配字符串结尾，如果存在换行，只匹配到换行前的结束字符串</td>
+</tr>
+<tr>
+<td>\z</td>
+<td>匹配字符串结尾，如果存在换行，同时还会匹配换行符</td>
+</tr>
+<tr>
+<td>\G</td>
+<td>匹配最后匹配完成的位置</td>
+</tr>
+<tr>
+<td>\n</td>
+<td>匹配一个换行符</td>
+</tr>
+<tr>
+<td>\t</td>
+<td>匹配一个制表符</td>
+</tr>
+<tr>
+<td>^</td>
+<td>匹配一行字符串的开头</td>
+</tr>
+<tr>
+<td>$</td>
+<td>匹配一行字符串的结尾</td>
+</tr>
+<tr>
+<td>.</td>
+<td>匹配任意字符，除了换行符，当re.DOTALL标记被指定时，则可以匹配包括换行符的任意字符</td>
+</tr>
+<tr>
+<td>[…]</td>
+<td>用来表示一组字符，单独列出，比如[amk]匹配a、m或k</td>
+</tr>
+<tr>
+<td>…</td>
+<td>不在[]中的字符，比如abc匹配除了a、b、c之外的字符</td>
+</tr>
+<tr>
+<td>*</td>
+<td>匹配0个或多个表达式</td>
+</tr>
+<tr>
+<td>+</td>
+<td>匹配1个或多个表达式</td>
+</tr>
+<tr>
+<td>?</td>
+<td>匹配0个或1个前面的正则表达式定义的片段，非贪婪方式</td>
+</tr>
+<tr>
+<td>{n}</td>
+<td>精确匹配n个前面的表达式</td>
+</tr>
+<tr>
+<td>{n, m}</td>
+<td>匹配n到m次由前面正则表达式定义的片段，贪婪方式</td>
+</tr>
+<tr>
+<td>a</td>
+<td>b</td>
+</tr>
+<tr>
+<td>( )</td>
+<td>匹配括号内的表达式，也表示一个组</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>Python的<kbd>re</kbd>库提供了整个正则表达式的实现，利用这个库，可以在Python中使用正则表达式。</li>
+</ul>
+<h1 id="1-match"><a class="markdownIt-Anchor" href="#1-match"></a> 1 match()</h1>
+<ul>
+<li><kbd>match()</kbd>方法会尝试从字符串的<strong>起始位置</strong>匹配正则表达式，如果匹配，就返回匹配成功的结果；如果不匹配，就返回<kbd>None</kbd></li>
+<li>而在match()方法中，第一个参数传入了正则表达式，第二个参数传入了要匹配的字符串。</li>
+<li>打印输出结果，可以看到结果是<kbd>SRE_Match</kbd>对象，这证明成功匹配。该对象有两个方法：<kbd>group()</kbd>方法可以输出匹配到的内容；<kbd>span()</kbd>方法可以输出匹配的范围。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">content = <span class="string">'Hello 123 4567 World_This is a Regex Demo'</span></span><br><span class="line">print(len(content))</span><br><span class="line">result = re.match(<span class="string">'^Hello\s\d\d\d\s\d&#123;4&#125;\s\w&#123;10&#125;'</span>, content)</span><br><span class="line">print(result)</span><br><span class="line">print(result.group())</span><br><span class="line">print(result.span())</span><br><span class="line"></span><br><span class="line"><span class="comment">#输出结果</span></span><br><span class="line"><span class="number">41</span></span><br><span class="line">&lt;_sre.SRE_Match object; span=(<span class="number">0</span>, <span class="number">25</span>), match=<span class="string">'Hello 123 4567 World_This'</span>&gt;</span><br><span class="line">Hello <span class="number">123</span> <span class="number">4567</span> World_This</span><br><span class="line">(<span class="number">0</span>, <span class="number">25</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="11-匹配目标"><a class="markdownIt-Anchor" href="#11-匹配目标"></a> 1.1 匹配目标</h2>
+<ul>
+<li>如果想从字符串中提取一部分内容，可以使用<kbd>()</kbd>括号将想提取的子字符串括起来。调用group()方法传入分组的索引（从1开始）即可获取提取的结果。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">content = <span class="string">'Hello 1234567 World_This is a Regex Demo'</span></span><br><span class="line">result = re.match(<span class="string">'^Hello\s(\d+)\sWorld'</span>, content)</span><br><span class="line">print(result)</span><br><span class="line">print(result.group())</span><br><span class="line">print(result.group(<span class="number">1</span>))</span><br><span class="line">print(result.span())</span><br><span class="line"></span><br><span class="line"><span class="comment">#输出结果</span></span><br><span class="line">&lt;_sre.SRE_Match object; span=(<span class="number">0</span>, <span class="number">19</span>), match=<span class="string">'Hello 1234567 World'</span>&gt;</span><br><span class="line">Hello <span class="number">1234567</span> World</span><br><span class="line"><span class="number">1234567</span></span><br><span class="line">(<span class="number">0</span>, <span class="number">19</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="12-通用匹配"><a class="markdownIt-Anchor" href="#12-通用匹配"></a> 1.2 通用匹配</h2>
+<ul>
+<li><kbd>.*</kbd>（点星）：其中<kbd>.</kbd>（点）可以匹配任意字符（除换行符），<kbd>*</kbd>（星）代表匹配前面的字符无限次，所以它们组合在一起就可以匹配任意字符了。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">content = <span class="string">'Hello 123 4567 World_This is a Regex Demo'</span></span><br><span class="line">result = re.match(<span class="string">'^Hello.*Demo$'</span>, content)</span><br><span class="line">print(result)</span><br><span class="line">print(result.group())</span><br><span class="line">print(result.span())</span><br><span class="line"></span><br><span class="line"><span class="comment">#运行结果</span></span><br><span class="line">&lt;_sre.SRE_Match object; span=(<span class="number">0</span>, <span class="number">41</span>), match=<span class="string">'Hello 123 4567 World_This is a Regex Demo'</span>&gt;</span><br><span class="line">Hello <span class="number">123</span> <span class="number">4567</span> World_This <span class="keyword">is</span> a Regex Demo</span><br><span class="line">(<span class="number">0</span>, <span class="number">41</span>)</span><br></pre></td></tr></table></figure>
+<h2 id="13-贪婪与非贪婪"><a class="markdownIt-Anchor" href="#13-贪婪与非贪婪"></a> 1.3 贪婪与非贪婪</h2>
+<ul>
+<li>贪婪匹配：如下例，<kbd>.*</kbd>（点星）默认为贪婪匹配，会匹配尽可能多的字符。正则表达式中，.*后面是\d+，也就是至少一个数字，，因此，.*就尽可能匹配多的字符，这里就把123456匹配了，给\d+留下一个可满足条件的数字7，最后得到的内容就只有数字7了。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">content = <span class="string">'Hello 1234567 World_This is a Regex Demo'</span></span><br><span class="line">result = re.match(<span class="string">'^He.*(\d+).*Demo$'</span>, content)</span><br><span class="line">print(result)</span><br><span class="line">print(result.group(<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">#运行结果</span></span><br><span class="line">&lt;_sre.SRE_Match object; span=(<span class="number">0</span>, <span class="number">40</span>), match=<span class="string">'Hello 1234567 World_This is a Regex Demo'</span>&gt;</span><br><span class="line"><span class="number">7</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>非贪婪匹配：尽可能匹配更少的字符，可以使用<kbd>.*?</kbd></li>
+<li>当.*?匹配到Hello后面的空白字符时，再往后的字符就是数字了，而\d+恰好可以匹配，那么这里.*?就不再进行匹配，交给\d+去匹配后面的数字。所以这样.*?匹配了尽可能少的字符，\d+的结果就是1234567了。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">content = <span class="string">'Hello 1234567 World_This is a Regex Demo'</span></span><br><span class="line">result = re.match(<span class="string">'^He.*?(\d+).*Demo$'</span>, content)</span><br><span class="line">print(result)</span><br><span class="line">print(result.group(<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">#输出结果</span></span><br><span class="line">&lt;_sre.SRE_Match object; span=(<span class="number">0</span>, <span class="number">40</span>), match=<span class="string">'Hello 1234567 World_This is a Regex Demo'</span>&gt;</span><br><span class="line"><span class="number">1234567</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>下例中，.*?没有匹配到任何结果，而.*则尽量匹配多的内容：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">content = <span class="string">'http://weibo.com/comment/kEraCN'</span></span><br><span class="line">result1 = re.match(<span class="string">'http.*?comment/(.*?)'</span>, content)</span><br><span class="line">result2 = re.match(<span class="string">'http.*?comment/(.*)'</span>, content)</span><br><span class="line">print(<span class="string">'result1'</span>, result1.group(<span class="number">1</span>))</span><br><span class="line">print(<span class="string">'result2'</span>, result2.group(<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">#运行结果</span></span><br><span class="line">result1 </span><br><span class="line">result2 kEraCN</span><br></pre></td></tr></table></figure>
+<h2 id="14-修饰符"><a class="markdownIt-Anchor" href="#14-修饰符"></a> 1.4 修饰符</h2>
+<ul>
+<li>如下例，在字符串中加了<kbd>换行符</kbd>之后，匹配出错。这是因为<kbd>.</kbd>匹配除了换行符之外的所有字符。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">content = <span class="string">'''Hello 1234567 World_This</span></span><br><span class="line"><span class="string">is a Regex Demo</span></span><br><span class="line"><span class="string">'''</span></span><br><span class="line">result = re.match(<span class="string">'^He.*?(\d+).*?Demo$'</span>, content)</span><br><span class="line">print(result.group(<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">#运行结果：</span></span><br><span class="line">AttributeError Traceback (most recent call last)</span><br><span class="line">&lt;ipython-input<span class="number">-18</span>-c7d232b39645&gt; <span class="keyword">in</span> &lt;module&gt;()</span><br><span class="line">      <span class="number">5</span> <span class="string">'''</span></span><br><span class="line"><span class="string">      6 result = re.match('^He.*?(\d+).*?Demo$', content)</span></span><br><span class="line"><span class="string">----&gt; 7 print(result.group(1))</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">AttributeError: 'NoneType' object has no attribute 'group'</span></span><br></pre></td></tr></table></figure>
+<ul>
+<li>这里只需加一个修饰符<kbd>re.S</kbd>，即可修正这个错误，这个修饰符的作用是使.匹配包括换行符在内的所有字符：</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">result = re.match(<span class="string">'^He.*?(\d+).*?Demo$'</span>, content, re.S)</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>常见修饰符总结</strong><br />
+| 修饰符 | 描述 |<br />
+|–|--|<br />
+re.I|使匹配对大小写不敏感<br />
+re.L|做本地化识别（locale-aware）匹配<br />
+re.M|多行匹配，影响^和$<br />
+re.S|使.匹配包括换行在内的所有字符<br />
+re.U|根据Unicode字符集解析字符。这个标志影响\w、\W、 \b和\B<br />
+re.X|该标志通过给予你更灵活的格式以便你将正则表达式写得更易于理解</li>
+</ul>
+<h2 id="15-转义匹配"><a class="markdownIt-Anchor" href="#15-转义匹配"></a> 1.5 转义匹配</h2>
+<ul>
+<li>当遇到用于正则匹配模式的特殊字符时，在前面加反斜线转义一下即可。例如<kbd>.</kbd>就可以用<kbd>\.</kbd>来匹配<kbd>/</kbd></li>
+</ul>
+<h1 id="2-search"><a class="markdownIt-Anchor" href="#2-search"></a> 2 search()</h1>
+<ul>
+<li>前面提到，match()方法是从字符串的开头开始匹配的，一旦开头不匹配，那么整个匹配就失败了。这在做匹配时并不方便。它更适合用来检测某个字符串是否符合某个正则表达式的规则。</li>
+<li><kbd>search()</kbd>：它在匹配时会扫描整个字符串，然后返回第一个（Attention：只返回第一个）成功匹配的结果。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">content = <span class="string">'Extra stings Hello 1234567 World_This is a Regex Demo Extra stings'</span></span><br><span class="line">result = re.search(<span class="string">'Hello.*?(\d+).*?Demo'</span>, content)</span><br><span class="line">print(result)</span><br><span class="line"><span class="keyword">print</span> (result.group(<span class="number">1</span>))</span><br><span class="line"></span><br><span class="line"><span class="comment">#运行结果</span></span><br><span class="line">&lt;re.Match object; span=(<span class="number">13</span>, <span class="number">53</span>), match=<span class="string">'Hello 1234567 World_This is a Regex Demo'</span>&gt;</span><br><span class="line"><span class="number">1234567</span></span><br></pre></td></tr></table></figure>
+<h1 id="3-findall"><a class="markdownIt-Anchor" href="#3-findall"></a> 3 findall()</h1>
+<ul>
+<li><kbd>findall()</kbd>：获取匹配正则表达式的<strong>所有内容</strong>。</li>
+<li>该方法会搜索整个字符串，然后返回匹配正则表达式的所有内容。返回结果是一个元组组成的列表</li>
+<li>如果只是获取第一个内容，可以用<kbd>search()</kbd>方法。当需要提取多个内容时，可以用<kbd>findall()</kbd>方法。</li>
+</ul>
+<h1 id="4-sub"><a class="markdownIt-Anchor" href="#4-sub"></a> 4 sub()</h1>
+<ul>
+<li><kbd>sub()</kbd>方法可以用来修改文本。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"></span><br><span class="line">content = <span class="string">'54aK54yr5oiR54ix5L2g'</span></span><br><span class="line">content = re.sub(<span class="string">'\d+'</span>, <span class="string">''</span>, content)</span><br><span class="line">print(content)</span><br><span class="line"></span><br><span class="line"><span class="comment">#输出结果：</span></span><br><span class="line">aKyroiRixLg</span><br></pre></td></tr></table></figure>
+<ul>
+<li>在实际应用中，可以先使用sub()将一些无用的内容替换为空，然后在进行匹配。可以节省工作。</li>
+<li>下例中， 用sub替换时用<kbd>|</kbd>将两个正则表达式分割开，字符串中符合两个正则表达式的内容<strong>都会</strong>被替换掉。</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line">html = <span class="string">'&lt;a href="/2.mp3" singer="任贤齐"&gt;沧海一声笑&lt;/a&gt;'</span></span><br><span class="line">html = re.sub(<span class="string">'&lt;a.*?&gt;|&lt;/a&gt;'</span>, <span class="string">''</span>, html)</span><br><span class="line"><span class="keyword">print</span> (html)</span><br><span class="line"></span><br><span class="line"><span class="comment">#输出结果</span></span><br><span class="line">沧海一声笑</span><br></pre></td></tr></table></figure>
+<h1 id="5-compile"><a class="markdownIt-Anchor" href="#5-compile"></a> 5 compile()</h1>
+<ul>
+<li><kbd>compile()</kbd>：可以将正则字符串编译成正则表达式对象，以便在后面的匹配中复用。</li>
+<li>如下例，我们想分别将3个日期中的时间去掉。这里没有必要重复写3个同样的正则表达式，此时可以借助compile()方法将正则表达式编译成一个正则表达式对象，以便复用</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> re</span><br><span class="line"> </span><br><span class="line">content1 = <span class="string">'2016-12-15 12:00'</span></span><br><span class="line">content2 = <span class="string">'2016-12-17 12:55'</span></span><br><span class="line">content3 = <span class="string">'2016-12-22 13:21'</span></span><br><span class="line">pattern = re.compile(<span class="string">'\d&#123;2&#125;:\d&#123;2&#125;'</span>)</span><br><span class="line">result1 = re.sub(pattern, <span class="string">''</span>, content1)</span><br><span class="line">result2 = re.sub(pattern, <span class="string">''</span>, content2)</span><br><span class="line">result3 = re.sub(pattern, <span class="string">''</span>, content3)</span><br><span class="line">print(result1, result2, result3)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>另外，compile()还可以传入修饰符，例如re.S等修饰符，这样在search()、findall()等方法中就不需要额外传了。所以，compile()方法可以说是给正则表达式做了一层封装，以便我们更好地复用。</li>
+</ul>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Alston</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="/alst0n.site/2020/02/21/Python3%E7%88%AC%E8%99%AB%E7%AC%94%E8%AE%B0-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/">alst0n.site/2020/02/21/Python3%E7%88%AC%E8%99%AB%E7%AC%94%E8%AE%B0-%E6%AD%A3%E5%88%99%E8%A1%A8%E8%BE%BE%E5%BC%8F/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="alst0n.site">Alston's blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Python/">Python</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2020/02/21/Python3%E7%88%AC%E8%99%AB%E7%AC%94%E8%AE%B0-%E8%A7%A3%E6%9E%90%E5%BA%93XPath/"><i class="fa fa-chevron-left">  </i><span>Python3爬虫笔记-解析库XPath</span></a></div><div class="next-post pull-right"><a href="/2020/02/21/Python3%E7%88%AC%E8%99%AB%E7%AC%94%E8%AE%B0-requests/"><span>Python3爬虫笔记-requests</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer class="footer-bg" style="background-image: url(https://desk-fd.zol-img.com.cn/t_s960x600c5/g2/M00/0A/0A/ChMlWlz3U4OIPcZQAAzptvLfCWMAAKkVgN3Z6YADOnO861.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2020 By Alston</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script src="/js/search/local-search.js"></script><script id="ribbon" src="/js/third-party/canvas-ribbon.js" size="150" alpha="0.6" zIndex="-1" data-click="false"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div><script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","model":{"jsonPath":"live2d-widget-model-hibiki"},"display":{"superSample":2,"width":100,"height":220,"position":"right","hOffset":10,"vOffset":10},"log":false,"tagMode":false});</script></body></html>
