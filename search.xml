@@ -4,6 +4,33 @@
   
     
     <entry>
+      <title>PaperNote-一种情报驱动的安全感知APT防御机制</title>
+      <link href="/2020/02/26/PaperNote-%E4%B8%80%E7%A7%8D%E6%83%85%E6%8A%A5%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%AE%89%E5%85%A8%E6%84%9F%E7%9F%A5APT%E9%98%B2%E5%BE%A1%E6%9C%BA%E5%88%B6/"/>
+      <url>/2020/02/26/PaperNote-%E4%B8%80%E7%A7%8D%E6%83%85%E6%8A%A5%E9%A9%B1%E5%8A%A8%E7%9A%84%E5%AE%89%E5%85%A8%E6%84%9F%E7%9F%A5APT%E9%98%B2%E5%BE%A1%E6%9C%BA%E5%88%B6/</url>
+      
+        <content type="html"><![CDATA[<p>原文标题：An Intelligence-Driven Security-Aware Defense Mechanism for Advanced Persistent Threats</p><p>原文作者：Yuqing Li, Wenkuan Dai, Jie Bai, Xiaoying Gan, Member, IEEE, Jingchao Wang, and Xinbing Wang, Senior<br />Member, IEEE</p><p>原文来源：TIFS 2018</p><p>原文链接：<a href="https://ieeexplore.ieee.org/abstract/document/8386813" target="_blank" rel="noopener">https://ieeexplore.ieee.org/abstract/document/8386813</a></p><p>这是一篇偏向于理论的文章，其中有非常多的公式，较为抽象，因此仅总结了文章的主要思路。</p><h1 id="1-摘要"><a class="markdownIt-Anchor" href="#1-摘要"></a> 1 摘要</h1><p>现今的安全防护工作，要么着眼于一次性的攻击事件，要么将检测和响应策略分离开。如此一来会忽略APT攻击的持久性和风险异质性（risk heterogeneity，不同类别的风向）。因此，本问题提出了<strong>以威胁情报为支撑的</strong>、<strong>基于李雅普诺夫（Lyapunov-based）的安全感之防御机制</strong>，其鲁棒性的防御策略指定来源于异质性知识。</p><p>本文提出的机制，在理论上可以证明其具有有限的队列积压、收益最优、无下溢情况、对检测误差具有鲁棒性。</p><h1 id="2-简介"><a class="markdownIt-Anchor" href="#2-简介"></a> 2 简介</h1><p>集成了检测和响应能力之后，情报驱动的安全防护将会是一种有效的方法，威胁情报包括威胁环境、影响和动机等。</p><p>许多安全防护领域的核心问题是如何进行高效率的安全资源分配，从攻防对抗的角度来看，资源分配问题可以放在博弈论的背景下，通过相互的战略行为分析，为有效的防御决策提供建议。</p><p>另一个研究重点是风险管理。使用攻击图或攻击树之类的表现形式，防御者可以根据网络状态之间的因果关系评估风险，并进一步确定最低成本的防御措施。</p><h2 id="21-挑战及应对措施"><a class="markdownIt-Anchor" href="#21-挑战及应对措施"></a> 2.1 挑战及应对措施</h2><p>本文主要解决了以下两个挑战：</p><ul><li>动态、长时间响应</li><li>安全感知响应：即优先响应高风险的攻击。除了攻击概率这样的风险异质性，还有别的吗？</li></ul><p>为此，本文提出了<strong>基于李雅普诺夫的情报驱动防御机制</strong>，以实现长期的安全感知响应。考虑具有N个独立主机，一个攻击者和一个防御者。在威胁情报的支持下，我们构建了一个攻击图，该攻击图建模了攻防对抗。受到FlipIt Game的启发，每个对抗结果都会随着攻击图的变化而显现，其中每个玩家都可以通过支付费用来控制目标主机。从防御者的角度来看，整个系统的利润是解决攻击所获得的防御效用与所产生的防御成本之差。最后的目标是实现“长期收益最大化”。</p><ul><li><p><strong>优先级感知的虚拟队列</strong>（priority-aware virtual queues）：用于计算风险随时间的演变，它与攻击队列一起，为队列优化提供了主机异质性的融合。</p></li><li><p><strong>风险准入控制策略</strong>（tolerable risk admission control policy）：为了适应主机的风险承受能力，避免资源浪费。设定一个阈值，当主机的风险等级较低时，新的攻击事件可以被加入待响应事件中；若主机的风险等级较高时，表明当前的风险已经超过了主机的处理能力，将会禁止新的攻击事件加入待响应事件中。</p></li><li><p><strong>防御控制策略</strong>（defense control policy）：两步决策</p><ul><li>使用基于拍卖的分布式分配算法，攻击事件竞争响应机会，高风险的受攻击主机（high-risk，host-attack）具有较高的优先级</li><li>然后在获胜的攻击事件之间按比例分配公平的资源</li></ul></li></ul><h2 id="22-主要贡献"><a class="markdownIt-Anchor" href="#22-主要贡献"></a> 2.2 主要贡献</h2><p>（1）从攻击和风险等级两个角度来进行安全感知，提出了基于李雅普诺夫的、情报驱动的防御机制</p><p>（2）在威胁情报的支持下，将攻防对抗过程建模为动态攻击图。</p><p>（3）将该防御机制应用于由Cyberxingan开发的基于机器学习的异常检测系统中进行验证。</p><h1 id="3-系统设计"><a class="markdownIt-Anchor" href="#3-系统设计"></a> 3 系统设计</h1><p>系统设计的三个步骤是：检测、响应（重点）、状态更新，下图可以形象地理解本文提出的机制：</p><p><img src="https://s2.ax1x.com/2020/02/26/3aDtvd.png" alt="" /></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 科研 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 科研 </tag>
+            
+            <tag> APT </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>PaperNote-分析大量网络流量以进行APT检测</title>
       <link href="/2020/02/21/PaperNote-%E5%88%86%E6%9E%90%E5%A4%A7%E9%87%8F%E7%BD%91%E7%BB%9C%E6%B5%81%E9%87%8F%E4%BB%A5%E8%BF%9B%E8%A1%8CAPT%E6%A3%80%E6%B5%8B/"/>
       <url>/2020/02/21/PaperNote-%E5%88%86%E6%9E%90%E5%A4%A7%E9%87%8F%E7%BD%91%E7%BB%9C%E6%B5%81%E9%87%8F%E4%BB%A5%E8%BF%9B%E8%A1%8CAPT%E6%A3%80%E6%B5%8B/</url>
