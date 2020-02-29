@@ -58,7 +58,7 @@
 </li>
 <li>Objects：
 <ul>
-<li>表示实体，例如文件、pipes、网络连接</li>
+<li>表示文件、pipes、网络连接</li>
 <li>属性值包括：名称、类型（文件、pipe、socket等）、所有者和标签</li>
 </ul>
 </li>
@@ -87,11 +87,11 @@
 <h2 id="41-标签设计"><a class="markdownIt-Anchor" href="#41-标签设计"></a> 4.1 标签设计</h2>
 <p>如下定义<strong>可信度标签（trustworthiness tags，t-tags）</strong>，可信度依次降低：</p>
 <ul>
-<li><strong>良性可信标签（Benign authentic tag）</strong>：为<strong>数据和代码</strong>分配该标签，其来源（source）为<strong>良性</strong>且可靠性<strong>可被验证</strong>的</li>
-<li><strong>良性标签（Benign tag）</strong>：为<strong>数据和代码</strong>分配该标签，其来源为<strong>良性</strong>，但是来源可靠性<strong>未被充分验证</strong></li>
-<li><strong>未知标签（Unknown tag）</strong>：为<strong>数据和代码</strong>分配该标签，但是其来源未知</li>
+<li><strong>良性可信标签（Benign authentic tag）</strong>：为<strong>数据和代码</strong>分配该标签，被认为是良性，且其来源（source）的可靠性是可被验证的</li>
+<li><strong>良性标签（Benign tag）</strong>：为<strong>数据和代码</strong>分配该标签，被认为是良性，但是来源可靠性<strong>未被充分验证</strong></li>
+<li><strong>未知标签（Unknown tag）</strong>：为<strong>数据和代码</strong>分配该标签，其来源未知</li>
 </ul>
-<p>策略（policy）定义了那些来源是良性的，哪些来源验证时充分的；策略的最简单情况是白名单。如果对于某个源，没有策略应用在它上面，那么这个源则被打上未知标签。</p>
+<p>策略（policy）定义了那些来源是良性的，哪些来源验证是充分的；策略的最简单情况是白名单。如果对于某个源，没有策略应用在它上面，那么这个源则被打上未知标签。</p>
 <p>如下定义<strong>机密性标签（confidentiality tags，c-tags）</strong>，机密性依次降低：</p>
 <ul>
 <li><strong>Secret</strong>：高度敏感的信息，例如登陆凭证、私钥</li>
@@ -99,7 +99,7 @@
 <li><strong>Private</strong>：资料的披露涉及私隐，但未必构成安全威胁。</li>
 <li><strong>Public</strong>：可以被公开的数据</li>
 </ul>
-<p>我们设计的一个重要方面是<strong>分离代码和数据的t-tag</strong>。具体而言，即一个<strong>subject</strong>给定两个t-tag，一个表示其<strong>代码可信度（code trustworthiness，code t-tag）</strong>，另一个表示其<strong>数据可信度（data trustworthiness，data t-tag）</strong>。这样的设计可以削减重建场景的规模，加快取证分析的速度。而<strong>机密性标签仅仅与数据相关联。</strong></p>
+<p>我们设计的一个重要方面是<strong>分离代码和数据的t-tag</strong>。具体而言，即一个<strong>subject</strong>给定两个t-tag，一个表示其<strong>代码可信度（code trustworthiness，code t-tag）</strong>，另一个表示其<strong>数据可信度（data trustworthiness，data t-tag）</strong>。这样的设计通过将注意力放在少数的几个可疑事件上，可以削减重建场景的规模，加快取证分析的速度。而<strong>机密性标签仅仅与数据相关联。</strong></p>
 <p>（重要）已经存在的objects和subjects使用<strong>标签初始化策略</strong>分配初始标签。在系统执行过程中还会产生新的objects和subjects，它们由<strong>标签传播策略</strong>分配标签。最后，<strong>基于行为的检测策略</strong>来检测攻击。</p>
 <h2 id="42-基于标签的攻击检测"><a class="markdownIt-Anchor" href="#42-基于标签的攻击检测"></a> 4.2 基于标签的攻击检测</h2>
 <p>检测方法不应该要求知晓特定应用的一些细节，因为这需要有关应用程序的专家知识，而在动态环境中，应用程序可能会频繁更新。</p>
@@ -135,7 +135,7 @@
 <p>（检测策略匹配过程）当事件出现时，检测策略就会被执行。后面，除非手动配置，否则仅当<strong>目标subject或object</strong>（某个信息流的终点，Target）发生变化时，检测策略才会被再次执行。</p>
 <p>（标签策略）然后，标签策略按照指定的顺序进行尝试，一旦规则匹配，被规则指定的标签将会被分配给<strong>目标事件（Target，也就是subject/object）</strong></p>
 <h2 id="51-标签初始化策略"><a class="markdownIt-Anchor" href="#51-标签初始化策略"></a> 5.1 标签初始化策略</h2>
-<p>该策略被<strong>init trigger</strong>唤醒，然后将初始化标签应用于新的objects（subject呢？），或者早已存在但是在审计数据中第一次提及的objects。回顾一下，当一个subject创建了一个object的时候，默认object会继承该subject的标签，但是用标签初始化策略会将其覆盖。</p>
+<p>该策略被<strong>init trigger</strong>唤醒，然后将初始化标签应用于新的objects，或者早已存在但是在审计数据中第一次提及的objects。回顾一下，当一个subject创建了一个object的时候，默认object会继承该subject的标签，但是用标签初始化策略会将其覆盖。</p>
 <p>仍使用正则表达式来为object定义初始化标签：<br />
 <img src="https://img-blog.csdnimg.cn/20200212095225885.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
 <h2 id="52-标签传播策略"><a class="markdownIt-Anchor" href="#52-标签传播策略"></a> 5.2 标签传播策略</h2>
