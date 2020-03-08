@@ -41,7 +41,7 @@
 <p>时空特征是入侵检测系统中最常用的两个检测特征。目前的研究方法都应用CNN或RNN来构建单个模型，这显然不够全面。</p>
 <p>数据流量中的“字节、数据包、数据流”和自然语言处理中的“字符、句子、段落”非常相似。因此，对网络流量的分类类似于将自然语言中的段落分为正样本和负样本。</p>
 <h1 id="3-mscnn-lstm设计"><a class="markdownIt-Anchor" href="#3-mscnn-lstm设计"></a> 3 MSCNN-LSTM设计</h1>
-<p><img src="PaperNote-%E5%9F%BA%E4%BA%8E%E6%97%B6%E7%A9%BA%E7%89%B9%E5%BE%81%E8%9E%8D%E5%90%88%E7%9A%84%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B%E7%B3%BB%E7%BB%9F%E6%A8%A1%E5%9E%8B.assets/image-20200306115814868.png" alt="MSCNN—LSTM模型学习过程" /></p>
+<p><img src="https://s2.ax1x.com/2020/03/08/3xUrRg.png" alt="MSCNN—LSTM模型学习过程" /></p>
 <h2 id="31-数据选择"><a class="markdownIt-Anchor" href="#31-数据选择"></a> 3.1 数据选择</h2>
 <p>由于KDDCUP99和NSL-KDD年代过于久远，本文采用公开数据集<kbd>UNSW-NB15</kbd>.</p>
 <h2 id="32-数据处理"><a class="markdownIt-Anchor" href="#32-数据处理"></a> 3.2 数据处理</h2>
@@ -49,7 +49,7 @@
 <p>数据集包括9中类型的异常行为：Fuzzers, Analysis, Backdoors, DoS, Exploits, Generic, Reconnaissance, Shellcode and Worms</p>
 <p>特征可以分为以下几类：流量特征，基本特征，内容特征，时间特征，附加生成的特征、标签特征。</p>
 <p>数据集的49个特征中，显然存在一部分冗余。因此使用前人所得出的特征子集，这些特征子集是通过使用遗传算法作为特征搜索策略，并使用逻辑回归作为分类器来获得的，如下表所示：</p>
-<p><img src="PaperNote-%E5%9F%BA%E4%BA%8E%E6%97%B6%E7%A9%BA%E7%89%B9%E5%BE%81%E8%9E%8D%E5%90%88%E7%9A%84%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B%E7%B3%BB%E7%BB%9F%E6%A8%A1%E5%9E%8B.assets/image-20200305202730164.png" alt="特征子集" /></p>
+<p><img src="https://s2.ax1x.com/2020/03/08/3xU6Mj.png" alt="特征子集" /></p>
 <h3 id="321-数据标准化standardization"><a class="markdownIt-Anchor" href="#321-数据标准化standardization"></a> 3.2.1 数据标准化（standardization）</h3>
 <p>特征‘proto’、‘state’、‘service’、‘attack_act’的值都是字符型的，我们将其转化为数字型。比如特征‘proto’，将其三个最重要的值‘tcp’、‘udp’、‘icmp’分别映射为1、2、3，其余协议映射为4.</p>
 <h3 id="322-数据归一化normalization"><a class="markdownIt-Anchor" href="#322-数据归一化normalization"></a> 3.2.2 数据归一化（normalization）</h3>
@@ -58,12 +58,12 @@
 <h2 id="33-特征学习过程"><a class="markdownIt-Anchor" href="#33-特征学习过程"></a> 3.3 特征学习过程</h2>
 <p>整个数据流图像的空间特征，是CNN从单个的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>p</mi><mo>×</mo><mi>q</mi></mrow><annotation encoding="application/x-tex">p \times q</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.7777700000000001em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">p</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">×</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.625em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.03588em;">q</span></span></span></span>图像中学到，如下图所示，然后MSCNN的输出结构是单个的数据流向量。</p>
 <p>LSTM从多个数据流向量中学习时间特征，如下图所示，输出是代表网络数据流时空特征的、单个的数据流向量，它将根据提取出的特征被进行分类。</p>
-<p><img src="PaperNote-%E5%9F%BA%E4%BA%8E%E6%97%B6%E7%A9%BA%E7%89%B9%E5%BE%81%E8%9E%8D%E5%90%88%E7%9A%84%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B%E7%B3%BB%E7%BB%9F%E6%A8%A1%E5%9E%8B.assets/image-20200306115952383.png" alt="特征学习过程" /></p>
+<p><img src="https://s2.ax1x.com/2020/03/08/3xURZq.png" alt="特征学习过程" /></p>
 <h2 id="34-多尺度卷积multiscale-convolution"><a class="markdownIt-Anchor" href="#34-多尺度卷积multiscale-convolution"></a> 3.4 多尺度卷积（multiscale convolution）</h2>
 <p>对于网络流量的识别，不仅需要分散的局部特征（local feature），也需要将多个局部特征联合起来进行分类，因此将CNN调整为MSCNN。本文使用多个大小不同的<kbd>卷积核</kbd>来提取特征，并将它们组合以获得多组局部特征。MSCNN结构将基于<strong>三个原始的多尺度卷积层</strong>（每层有多个卷积核进行采集），<strong>三个卷积层</strong>，<strong>一个池化层</strong>和<strong>三个全连接层</strong>， 网络结构参数如下表所示：</p>
-<p><img src="PaperNote-%E5%9F%BA%E4%BA%8E%E6%97%B6%E7%A9%BA%E7%89%B9%E5%BE%81%E8%9E%8D%E5%90%88%E7%9A%84%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B%E7%B3%BB%E7%BB%9F%E6%A8%A1%E5%9E%8B.assets/image-20200306145153172.png" alt="MSCNN模型层级结构" /></p>
+<p><img src="https://s2.ax1x.com/2020/03/08/3xUoz4.png" alt="MSCNN模型层级结构" /></p>
 <p>MS卷积采用了三个不同尺度的卷积核，因为2×2、3×3的卷积是比较耗时的，所以在之前先进行1×1的卷积操作来降低特征空间的维度：</p>
-<p><img src="PaperNote-%E5%9F%BA%E4%BA%8E%E6%97%B6%E7%A9%BA%E7%89%B9%E5%BE%81%E8%9E%8D%E5%90%88%E7%9A%84%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B%E7%B3%BB%E7%BB%9F%E6%A8%A1%E5%9E%8B.assets/image-20200306180811903.png" alt="" /></p>
+<p><img src="https://s2.ax1x.com/2020/03/08/3xUbLR.png" alt="" /></p>
 <ul>
 <li>关于1×1卷积核</li>
 </ul>
@@ -133,19 +133,19 @@
 <h1 id="4-实验"><a class="markdownIt-Anchor" href="#4-实验"></a> 4 实验</h1>
 <h2 id="41-实验数据"><a class="markdownIt-Anchor" href="#41-实验数据"></a> 4.1 实验数据</h2>
 <p>训练集中包含175341条数据，测试集中包含82332条数据。采样需要遵循<strong>大样本平均采样</strong>和<strong>小样本完整采样</strong>的原则。 通过采样获得的测试集为Test_Set_A。 下表中显示了每个数据集中的异常行为类别和分布。</p>
-<p><img src="PaperNote-%E5%9F%BA%E4%BA%8E%E6%97%B6%E7%A9%BA%E7%89%B9%E5%BE%81%E8%9E%8D%E5%90%88%E7%9A%84%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B%E7%B3%BB%E7%BB%9F%E6%A8%A1%E5%9E%8B.assets/image-20200307214614145.png" alt="" /></p>
+<p><img src="https://s2.ax1x.com/2020/03/08/3xUvFK.png" alt="" /></p>
 <p>为了进一步测试模型的泛化能力，这项工作中使用了一个新的测试集Test_Set_B。 观察数据集，我们可以发现网络流量的正常行为大约占总流量的三分之一，而罕见的攻击类别“Worms”和“Shellcode”仅占很小的比例。因此，在Test_Set_B中，“Worms”和“Shellcode”类型的比例有所增加。 下表展示了测试集Test_Set_B的具体分布：</p>
-<p><img src="PaperNote-%E5%9F%BA%E4%BA%8E%E6%97%B6%E7%A9%BA%E7%89%B9%E5%BE%81%E8%9E%8D%E5%90%88%E7%9A%84%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B%E7%B3%BB%E7%BB%9F%E6%A8%A1%E5%9E%8B.assets/image-20200307214658069.png" alt="" /></p>
+<p><img src="https://s2.ax1x.com/2020/03/08/3xa9QH.png" alt="" /></p>
 <h2 id="42-实验过程"><a class="markdownIt-Anchor" href="#42-实验过程"></a> 4.2 实验过程</h2>
 <p>每个MS卷积层使用三种不同大小的卷积核，padding方法使用“same padding”，损失函数使用“Categorical_crossentropy function”，优化器使用“AdamOptimizer”，权重和偏移量使用0均值的高斯初始化。</p>
 <p>使用dropout来避免过拟合，其连接概率p在通过实验探索后选取p=0.5</p>
 <h2 id="43-实验度量"><a class="markdownIt-Anchor" href="#43-实验度量"></a> 4.3 实验度量</h2>
-<p><img src="PaperNote-%E5%9F%BA%E4%BA%8E%E6%97%B6%E7%A9%BA%E7%89%B9%E5%BE%81%E8%9E%8D%E5%90%88%E7%9A%84%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B%E7%B3%BB%E7%BB%9F%E6%A8%A1%E5%9E%8B.assets/image-20200308103457781.png" alt="" /></p>
+<p><img src="https://s2.ax1x.com/2020/03/08/3xaefS.png" alt="" /></p>
 <h2 id="44-实验结果"><a class="markdownIt-Anchor" href="#44-实验结果"></a> 4.4 实验结果</h2>
 <p>设置了三个对照实验：</p>
-<p><img src="PaperNote-%E5%9F%BA%E4%BA%8E%E6%97%B6%E7%A9%BA%E7%89%B9%E5%BE%81%E8%9E%8D%E5%90%88%E7%9A%84%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B%E7%B3%BB%E7%BB%9F%E6%A8%A1%E5%9E%8B.assets/image-20200308103638051.png" alt="" /></p>
+<p><img src="https://s2.ax1x.com/2020/03/08/3xaGkV.png" alt="" /></p>
 <p>下图比较了在罕见攻击情况下这四个模型的检测能力。检测罕见攻击情况的重点是减少误报率</p>
-<p><img src="PaperNote-%E5%9F%BA%E4%BA%8E%E6%97%B6%E7%A9%BA%E7%89%B9%E5%BE%81%E8%9E%8D%E5%90%88%E7%9A%84%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B%E7%B3%BB%E7%BB%9F%E6%A8%A1%E5%9E%8B.assets/image-20200308104411903.png" alt="" /></p>
+<p><img src="https://s2.ax1x.com/2020/03/08/3xadX9.png" alt="" /></p>
 <h1 id="5-总结"><a class="markdownIt-Anchor" href="#5-总结"></a> 5 总结</h1>
 <ul>
 <li>尽管使用神经网络不需要太多的关注特征工程，但是在面对众多的特征时，需要进行进一步的特征选择</li>
