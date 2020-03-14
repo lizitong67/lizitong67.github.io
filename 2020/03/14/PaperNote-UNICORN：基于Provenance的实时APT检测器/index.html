@@ -1,0 +1,202 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="PaperNote-UNICORN：基于Provenance的实时APT检测器"><meta name="keywords" content="科研,APT,入侵检测"><meta name="author" content="Alston"><meta name="copyright" content="Alston"><title>PaperNote-UNICORN：基于Provenance的实时APT检测器 | Alston's blog</title><link rel="shortcut icon" href="/1231489.png"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><canvas class="fireworks"></canvas><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#1-摘要"><span class="toc-text"> 1 摘要</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-简介"><span class="toc-text"> 2 简介</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-背景"><span class="toc-text"> 3 背景</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#31-追踪系统调用的挑战"><span class="toc-text"> 3.1 追踪系统调用的挑战</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#32-whole-system-provenance"><span class="toc-text"> 3.2 Whole-System Provenance</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#33-问题陈述和总结"><span class="toc-text"> 3.3 问题陈述和总结</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-威胁模型"><span class="toc-text"> 4 威胁模型</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-设计"><span class="toc-text"> 5 设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#51-构造graph直方图"><span class="toc-text"> 5.1 构造Graph直方图</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#511-streaming-variant-and-complexity"><span class="toc-text"> 5.1.1 Streaming Variant and Complexity</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#512-由于概念漂移而忽视直方图中的元素"><span class="toc-text"> 5.1.2 由于概念漂移而忽视直方图中的元素</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#513-入侵检测场景中的适用性"><span class="toc-text"> 5.1.3 入侵检测场景中的适用性</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#52-生成简略图graph-sketches"><span class="toc-text"> 5.2 生成简略图（Graph Sketches）</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#53-学习进化模型"><span class="toc-text"> 5.3 学习进化模型</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#54-异常检测"><span class="toc-text"> 5.4 异常检测</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-实现"><span class="toc-text"> 6 实现</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-评估"><span class="toc-text"> 7 评估</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#71-unicorn-vs-streamspot"><span class="toc-text"> 7.1 UNICORN vs. StreamSpot</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#72-darpa-tc-datasets"><span class="toc-text"> 7.2 DARPA TC Datasets</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#73-supply-chain攻击场景"><span class="toc-text"> 7.3 Supply Chain攻击场景</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#74-参数分析"><span class="toc-text"> 7.4 参数分析</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#75-处理速度"><span class="toc-text"> 7.5 处理速度</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#76-cpu-内存使用"><span class="toc-text"> 7.6 CPU &amp; 内存使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#77-讨论-局限性"><span class="toc-text"> 7.7 讨论 &amp; 局限性</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-相关研究"><span class="toc-text"> 8 相关研究</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-总结"><span class="toc-text"> 9 总结</span></a></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://pic4.zhimg.com/80/v2-1b0d0240350e3d8e0550845b6bdaad1e_hd.jpg"></div><div class="author-info__name text-center">Alston</div><div class="author-info__description text-center">计算机硕士在读</div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">39</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">15</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">10</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" href="https://blog.csdn.net/Sc0fie1d" target="_blank" rel="noopener">Alston's CSDN</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://s2.ax1x.com/2020/02/21/3uWnXD.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Alston's blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a><a class="site-page" href="/about">About</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">PaperNote-UNICORN：基于Provenance的实时APT检测器</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-03-14</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E7%A7%91%E7%A0%94/">科研</a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">4.3k</span><span class="post-meta__separator">|</span><span>阅读时长: 13 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>原文标题：UNICORN: Runtime Provenance-Based Detector for Advanced Persistent Threats</p>
+<p>原文作者：Xueyuan Han∗, Thomas Pasquiery, Adam Batesz, James Mickens∗ and Margo Seltzerx</p>
+<p>原文来源：NDSS 2020</p>
+<p>原文链接：<a href="https://arxiv.org/pdf/2001.01525.pdf" target="_blank" rel="noopener">https://arxiv.org/pdf/2001.01525.pdf</a></p>
+<h1 id="1-摘要"><a class="markdownIt-Anchor" href="#1-摘要"></a> 1 摘要</h1>
+<p>本文提出的<strong>UNICORN</strong>是一种<strong>基于异常</strong>的APT检测器，可以有效利用数据<strong>Provenance</strong>进行分析。</p>
+<p>从建模到检测，UNICORN均根据APT的独有特性（low-and-slow、0-Days）进行设计。通过广泛且快速的<strong>图分析</strong>，使用<strong>graph sketching</strong>技术，UNICORN可以在长时间运行的系统中分析<strong>Provenance Graph</strong>，从而识别未知、慢速攻击。其中的Provenance graph提供了丰富的上下文和历史信息。</p>
+<h1 id="2-简介"><a class="markdownIt-Anchor" href="#2-简介"></a> 2 简介</h1>
+<p>对于目前的研究情况，利用恶意软件特征来检测攻击行为的方法，攻击者一旦使用0-Day漏洞，防御者便无计可施；基于系统调用和系统时间的检测方法，由于数据过于密集，使得这些方法难以对长时间的行为模式进行建模。因此，<strong>data provenance</strong>是一种检测APT更合适的数据。</p>
+<p>但是基于provenance的APT检测方法，其难处在于，Provenance Graph的分析是相当耗费计算资源的，这是因为APT的慢速攻击，图的大小也会越来越大。目前检测系统所面临的主要问题包括：</p>
+<ul>
+<li>静态模型(rfr53)难以捕获长时间的系统行为</li>
+<li>动态模型(rfr83)可能会被low-and-slow APT进行中毒攻击</li>
+<li>在主存内进行计算的方法，应对长期运行的攻击表现不佳</li>
+</ul>
+<p>基于此，本文提出了UNICORN，使用graph sketching来建立一个<strong>增量更新</strong>、<strong>固定大小</strong>的<strong>纵向图数据结构</strong>。这种纵向性质允许进行广泛的图探索，使得UNICORN可以追踪隐蔽的入侵行为。而固定大小和增量更新可以避免在内存中来表示provenance graph，因此UNICORN具有可扩展性，且计算和存储开销较低。UNICORN在<strong>训练</strong>过程中直接对系统的行为进行建模，但此后不会更新模型，从而防止攻击者<strong>中毒模型</strong>。</p>
+<p>本文的主要贡献如下：</p>
+<ul>
+<li>提供了专为APT攻击量身定制的、基于Provenance的异常检测系统。</li>
+<li>介绍了一种<strong>sketch-based</strong>、<strong>time-weighted</strong>的<strong>provenance编码</strong>，从而可以简洁的概括长时间段内的provenance graph</li>
+<li>通过模拟和真实的APT攻击来评估UNICORN</li>
+<li><strong>开源！</strong></li>
+</ul>
+<h1 id="3-背景"><a class="markdownIt-Anchor" href="#3-背景"></a> 3 背景</h1>
+<h2 id="31-追踪系统调用的挑战"><a class="markdownIt-Anchor" href="#31-追踪系统调用的挑战"></a> 3.1 追踪系统调用的挑战</h2>
+<ul>
+<li>捕获到的系统调用杂乱分散，因此需要将其关联成data provenance</li>
+<li>data provenance的不可信问题：有些系统调用捕获机制可能会被绕过；race condition；TOCTTOU、TOATTOU、TORTTOU</li>
+<li>由于一些内核线程不使用系统调用，因此基于Syscall生成的Provenance是一些分散的图，而不是一张系统运行状况的完整图</li>
+</ul>
+<h2 id="32-whole-system-provenance"><a class="markdownIt-Anchor" href="#32-whole-system-provenance"></a> 3.2 Whole-System Provenance</h2>
+<p>Whole-System Provenance运行在操作系统层面，捕获所有的系统行为和它们之间的交互。通过捕获信息流和因果关系，即使攻击者通过操作内核对象来隐藏自己的行踪也无济于事。</p>
+<p>本文使用的<strong>CamFlow</strong>，采用了Linux Security Modules（LSM）框架来确保高效可靠的信息流记录。LSM可以消除race condition。</p>
+<h2 id="33-问题陈述和总结"><a class="markdownIt-Anchor" href="#33-问题陈述和总结"></a> 3.3 问题陈述和总结</h2>
+<p>目前使用data provenance的一些研究，其局限性在于</p>
+<ul>
+<li>预定义边匹配规则，对于0-Day漏洞利用攻击无效</li>
+<li>分析小部分的provenance graph（而非whole-system）限制了视野</li>
+<li>系统行为模型难以检测APT：静态模型无法捕获长期运行的系统的行为；动态模型容易遭受中毒攻击</li>
+<li>基于内存的方法，在执行长期检测上有局限性</li>
+</ul>
+<p>于是，UNICORN将系统范围内的APT入侵检测问题，形式化为一个whole-system provenance graph中的实时异常检测问题。首先建立一个已知良性的provenance graph模型，然后再任何时间点，都将从系统开始启动到目前为止所产生的整个的provenance graph与良性模型进行比较，如果偏离了该模型，那么就认为发生了攻击。（典型的abnormal-based）</p>
+<p>对于APT检测来说，理想的provenance-based IDS必须满足：</p>
+<ul>
+<li>
+<p>连续、高效地分析provenance graph，同时充分利用整个系统provenance graph提供的丰富信息内容</p>
+</li>
+<li>
+<p>在不假设攻击行为的情况下，应考虑系统执行的整个持续时间</p>
+</li>
+<li>
+<p>仅学习正常的系统行为，而不学习攻击者的行为</p>
+</li>
+</ul>
+<h1 id="4-威胁模型"><a class="markdownIt-Anchor" href="#4-威胁模型"></a> 4 威胁模型</h1>
+<p>UNICORN的任务是在任何阶段检测到APT攻击。我们假设在受到攻击之前，UNICORN在正常运行期间会完全观察主机系统，并且在此初始建模期间不会发生攻击。</p>
+<p>数据收集框架的完整性是UNICORN正确性的核心，因此我们假定所使用的CamFlow中，LSM完整性是可信的</p>
+<h1 id="5-设计"><a class="markdownIt-Anchor" href="#5-设计"></a> 5 设计</h1>
+<p><img src="https://img-blog.csdnimg.cn/20200314214143558.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="UNICORN's general pipeline" /></p>
+<ul>
+<li>以带标签的、基于流的provenance graph作为输入：该图由CamFlow生成，每条边是带属性的，整个图是单张、whole-system的偏序DAG</li>
+<li>在运行时构建内存直方图</li>
+<li>定期计算固定大小的简略图（graph sketch）</li>
+<li>将简略图聚类为模型</li>
+</ul>
+<h2 id="51-构造graph直方图"><a class="markdownIt-Anchor" href="#51-构造graph直方图"></a> 5.1 构造Graph直方图</h2>
+<p>我们的目标是有效地比较provenance graph，同时容忍正常执行中的微小变化。 对于算法，我们有两个标准：</p>
+<ul>
+<li>表示应考虑长期的因果关系</li>
+<li>必须能够在实时流图数据上实现该算法，以便我们能够在入侵发生时阻止入侵（不仅仅是检测到入侵）。</li>
+</ul>
+<p>本文基于同构的一维WL测试，采用了线性时间的、快速的<strong>Weisfeiler-Lehman</strong>（<strong>WL</strong>）<strong>subtree graph kernel</strong>算法。同构性的WL测试及其子树kernel变化，以其对多种图的判别能力而闻名，超越了许多最新的图学习算法（例如，图神经网络）。</p>
+<p>对<strong>Weisfeiler-Lehman</strong>（<strong>WL</strong>）<strong>subtree graph kernel</strong>的使用取决于我们构建顶点直方图的能力，捕获围绕每个顶点的图结构。 我们根据增强顶点标签对顶点进行分类，标签描述了顶点的R-hop邻居。</p>
+<p>通过<strong>迭代标签传播</strong>来构建这些<strong>增强顶点标签</strong>：</p>
+<ul>
+<li>假设现在有一个完全静态的图，单个重标记步骤将 1）一个顶点的标签、2）所有传入该顶点的边的边的标签、3）所有这些边的源顶点的标签 作为输入；然后为这个顶点输出一个新的标签，表示所有输入标签的聚合。</li>
+<li>我们对每个顶点重复此过程，然后重复整个过程R次以构造描述R-hop邻居的标签。</li>
+<li>一旦为图中的每个顶点构造了增强的顶点标签，我们就创建一个直方图，其buckets对应于这些标签。</li>
+<li>同构性的WL测试基于这些增强顶点标签，比较两个图，如果两个图在相似的标签集上具有相似的分布，则它们是相似的。</li>
+</ul>
+<p>下面是该算法的形式化描述：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200314214316686.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="Graph Histogram Generation" /></p>
+<p>我们的目标是构建一个直方图，图中的每个元素对应一个唯一的顶点标签，用于捕获顶点的R-hop的in-coming邻居。</p>
+<h3 id="511-streaming-variant-and-complexity"><a class="markdownIt-Anchor" href="#511-streaming-variant-and-complexity"></a> 5.1.1 Streaming Variant and Complexity</h3>
+<p>上面的算法仅在<strong>新到达的顶点</strong>，或<strong>在那些邻居被新到达的边所影响的顶点</strong>上运行。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200314214339273.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<h3 id="512-由于概念漂移而忽视直方图中的元素"><a class="markdownIt-Anchor" href="#512-由于概念漂移而忽视直方图中的元素"></a> 5.1.2 由于概念漂移而忽视直方图中的元素</h3>
+<p>系统行为经常会随着时间变化，会导致streaming provenance graph的基础统计属性发生变化，这种现象我们称之为<strong>概念漂移</strong>（concept drift）。</p>
+<p><strong>逐渐忘记机制</strong>：UNICORN通过对直方图元素计数使用<strong>指数权重衰减</strong>来逐渐<strong>消除过时的数据</strong>，从而解决了系统行为中的此类变化。 它分配的权重与数据的年龄成反比。</p>
+<p><span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>x</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">x_t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>即为Algorithm.1中23行的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>l</mi><mi>i</mi></msub><mo stretchy="false">(</mo><mi>v</mi><mo stretchy="false">)</mo></mrow><annotation encoding="application/x-tex">l_i(v)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.01968em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="mclose">)</span></span></span></span>，当t时刻新的数据条目<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>x</mi><mi>t</mi></msub></mrow><annotation encoding="application/x-tex">x_t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span></span></span></span>出现时，采用下面的计数方式，其中<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msub><mi>w</mi><mi>t</mi></msub><mo>=</mo><msup><mi>e</mi><mrow><mo>−</mo><mi>λ</mi><mi mathvariant="normal">∆</mi><mi>t</mi></mrow></msup></mrow><annotation encoding="application/x-tex">w_t = e^{-λ∆t}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.58056em;vertical-align:-0.15em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8491079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">e</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8491079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mathdefault mtight">λ</span><span class="mord mtight">∆</span><span class="mord mathdefault mtight">t</span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p><img src="https://img-blog.csdnimg.cn/202003142143536.png" alt="" /></p>
+<h3 id="513-入侵检测场景中的适用性"><a class="markdownIt-Anchor" href="#513-入侵检测场景中的适用性"></a> 5.1.3 入侵检测场景中的适用性</h3>
+<p>上述“逐渐忘记”的方法，使得UNICORN可以着眼于当前的系统执行动态，而且那些与当先的object/activity有关系的事件不会被忘记。</p>
+<h2 id="52-生成简略图graph-sketches"><a class="markdownIt-Anchor" href="#52-生成简略图graph-sketches"></a> 5.2 生成简略图（Graph Sketches）</h2>
+<p>直方图是描述系统执行的简单向量空间图统计量。 但是，与传统的基于直方图的相似性分析不同，UNICORN会随着新边缘的到来不断更新直方图。</p>
+<p>本文采用<strong>locality sensitive hashing</strong>，也称作<strong>similarity-preserving data sketching</strong>。UNICORN的部署采用了前人的研究成果<strong>HistoSketch</strong>.</p>
+<h2 id="53-学习进化模型"><a class="markdownIt-Anchor" href="#53-学习进化模型"></a> 5.3 学习进化模型</h2>
+<p>在给定graph sketch和相似性度量的情况下，聚类是检测离群点常用的数据挖掘手段。然而传统的聚类方法无法捕获系统不断发展的行为。UNICORN利用其流处理的能力，创建了进化模型，可以捕获系统正常行为的变化。更重要的是，模型的建立是在<strong>训练阶段</strong>完成的，而不是在<strong>部署阶段</strong>，因为部署阶段训练模型可能会遭受中毒攻击。</p>
+<p>UNICORN在训练期间创建一系列按时间顺序排列的sketches，然后从一个单独的服务器上，使用<strong>K-medoids</strong>算法将这些sketch序列进行聚类，使用<strong>轮廓系数</strong>（silhouette coefficient）来确定最优的K值。每个簇表示系统执行的元状态（meta-states），如启动、初始化、稳定状态。然后UNICORN使用所有簇中sketches的时间顺序和每个簇的统计量（如直径、medoid），来生成系统进化的模型。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200314214405552.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="Generating an Evolution Trace" /></p>
+<h2 id="54-异常检测"><a class="markdownIt-Anchor" href="#54-异常检测"></a> 5.4 异常检测</h2>
+<p>UNICORN周期性的创建graph sketch，然后将其与在建模阶段学习到的所有子模型进行比对，sketch要么符合当前的状态，要么符合接下来的状态，否则便认为是异常的。因此，我们可能检测到两种类型的异常行为：不符合已经存在的簇；簇之间的转换时无效的。</p>
+<h1 id="6-实现"><a class="markdownIt-Anchor" href="#6-实现"></a> 6 实现</h1>
+<p>图处理算法使用C++部署<strong>GraphChi</strong>（vertex-centric 图处理框架）；数据解析和建模部分使用Python。</p>
+<h1 id="7-评估"><a class="markdownIt-Anchor" href="#7-评估"></a> 7 评估</h1>
+<p>评估旨在验证以下问题：</p>
+<ul>
+<li>UNICORN能否在长期运行的系统中，准确地检测APT攻击的异常行为</li>
+<li>针对APT的特性做出的设计决策有多重要？</li>
+<li>UNICORN的“逐渐忘记”策略是否能更好地理解系统行为？</li>
+<li>相比于现存的使用静态快照进行聚类的方法，UNICORN的进化模型是否更有效？</li>
+<li>UNICORN是否足够快速，以执行实时监视和检测？</li>
+<li>在系统执行过程中，UNICORN的内存和CPU使用如何？</li>
+</ul>
+<p>数据集采用DARPA TC3的三个APT攻击数据集：Cadets、ClearScope、THEIA</p>
+<h2 id="71-unicorn-vs-streamspot"><a class="markdownIt-Anchor" href="#71-unicorn-vs-streamspot"></a> 7.1 UNICORN vs. StreamSpot</h2>
+<ul>
+<li>SteamSpot数据集（public available）如下</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/2020031421442473.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<p>StreamSpot包含6个场景的信息流图，其中5个时良性的。每个场景运行100次，每次生成一个graph。使用Linux的SystemTap日志系统。</p>
+<p>我们使用这个数据集将UNICORN与StreamSpot对比，结果如下：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200314214437843.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /><br />
+<img src="https://img-blog.csdnimg.cn/20200314214447373.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述" /></p>
+<h2 id="72-darpa-tc-datasets"><a class="markdownIt-Anchor" href="#72-darpa-tc-datasets"></a> 7.2 DARPA TC Datasets</h2>
+<p><img src="https://img-blog.csdnimg.cn/20200314214656424.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<p>参考文献中有关于者三个DARPA数据集的详细介绍。</p>
+<p>本文将良性数据集的90%用于训练，10%用于测试；sketch size为200，R=3，检测结果如下：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200314214705789.png" alt="" /></p>
+<h2 id="73-supply-chain攻击场景"><a class="markdownIt-Anchor" href="#73-supply-chain攻击场景"></a> 7.3 Supply Chain攻击场景</h2>
+<p>前面的攻击场景无法确保异常行为和正常行为之间的相似性，因此本文在Continuous Integration（CI）平台上单独设计了两个APT攻击场景，并使用CamFlow（v0.5.0）来捕获whole-system provenance，其中每个场景运行了3天。</p>
+<p><img src="https://img-blog.csdnimg.cn/20200314214718306.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<p>将125个良性图分成五组进行5折交叉验证，来为正常行为进行建模。下图是实验的设置和结果：</p>
+<p><img src="https://img-blog.csdnimg.cn/20200314214732337.png" alt="" /><br />
+<img src="https://img-blog.csdnimg.cn/2020031421474942.png" alt="" /></p>
+<h2 id="74-参数分析"><a class="markdownIt-Anchor" href="#74-参数分析"></a> 7.4 参数分析</h2>
+<p>下面通过调整图VII中的各个Baseline参数，来观察性能变化，其中各个参数的概念如下：</p>
+<ul>
+<li>Batch Size（BS）：向GraphChi中一次提交的边的数量，它并不影响检测性能</li>
+<li>Hop Count（HC）：这定义了用于表征每个顶点的邻域的大小； 它衡量了sketch中特征的表现力。 跳数越大，捕获的上下文信息越多，其中一些可能无关紧要。</li>
+<li>Sketch Size（SS）：这是我们的固定大小直方图表示。SS越大，UNICORN可以包含有关演化图的更多信息，从而减少误差。但是，较大的SS最终会导致聚类中的维度灾难。</li>
+<li>Interval of Sketch Generation（SG）：这是构造新sketch之间添加到图的边数。较小的SG会使得相邻的sketch之间较为相似，这会产生较高的false negative和较低的recall、accuracy（为何？不应该仅仅是性能开销增大吗？）；较大的SG会产生粗粒度的变化，同样使得sketch之间相似度较高</li>
+<li>Weighted Decay Factor（DF）：该参数确定了我们忘记过去的比例。</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20200314214802956.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<h2 id="75-处理速度"><a class="markdownIt-Anchor" href="#75-处理速度"></a> 7.5 处理速度</h2>
+<p>实验环境为Amazon EC2 i3.2xlarge Linux machines with 8 vCPUs and 61GiB of memory.</p>
+<p>下图表示了随时间推移处理的边缘总数，以量化UNICORN的处理速度。CamFlow线（蓝色）表示捕获系统生成的边总数，其他线与该线越近，说明运行时性能越好，这意味着UNICORN与捕获系统CamFlow“保持一致”</p>
+<p><img src="https://img-blog.csdnimg.cn/20200314214812821.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<p>总体而言，上图表明UNICORN运行时对这些参数相对来说不敏感，这意味着UNICORN可以使用针对检测进行精度优化的参数，执行实时入侵检测。</p>
+<h2 id="76-cpu-内存使用"><a class="markdownIt-Anchor" href="#76-cpu-内存使用"></a> 7.6 CPU &amp; 内存使用</h2>
+<p>我们针对工作量相对较大（即CI执行内核编译）的系统评估UNICORN的CPU使用率和内存开销。 实验表明，UNICORN具有较低的CPU使用率和内存开销.</p>
+<p>下图展示了CPU开销：</p>
+<p><img src="https://img-blog.csdnimg.cn/2020031421482276.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<p>下图展示了在两个不同参数下，相同工作负载的内存开销，基本配置中的其他参数不会显着影响内存消耗：<br />
+<img src="https://img-blog.csdnimg.cn/20200314214841930.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<h2 id="77-讨论-局限性"><a class="markdownIt-Anchor" href="#77-讨论-局限性"></a> 7.7 讨论 &amp; 局限性</h2>
+<ul>
+<li>基于异常的检测</li>
+</ul>
+<p>首先，本文假设在UNICORN进行正常行为建模期间，系统是安全的；其次，本文假设存在详尽的、有限的系统行为模式，而且即使在运行过程中没有检测到全部，也检测到了大多数，因此如果如果UNICORN检测到未知的正常行为模式，就会产生误报。</p>
+<p>再者，攻击者想要模仿正常行为来绕过UNICORN的检测也是比较难的。</p>
+<p>另外，UNICORN监视系统的起点是和两性模型建模的起点是一样的。但是如果因为系统发生了错误而恢复到之前的状态时，就会导致系统状态与模型不匹配。解决这种问题的方法是在系统创建快照的同时保存其模型状态，当系统还原快照时，UNICORN将还原相应的模型状态。（Concept Drift？）</p>
+<p>另外，UNICORN还需要定期的重新训练模型。</p>
+<ul>
+<li>图分析</li>
+</ul>
+<p>需要对每个系统调整参数来提升检测性能。本文使用OpenTuner来自动调整。在本文的实验中，对于大多数数据集而言，都可以使用相同的参数</p>
+<ul>
+<li>异质的主机活动</li>
+</ul>
+<p>一些主机只会执行一些预先定义好的任务，UNICORN对这样环境下的主机检测效果较好。然而一些主机会有各种各样的异质性行为，UNICORN没有考虑这一类主机的安全性</p>
+<h1 id="8-相关研究"><a class="markdownIt-Anchor" href="#8-相关研究"></a> 8 相关研究</h1>
+<ul>
+<li><strong>基于主机的动态入侵检测</strong></li>
+</ul>
+<p>起初，IDS仅仅依靠系统调用来进行建模，但随着攻击技术的提升，检测的准确度也随之下降。所以下一代的IDS在系统调用中加入和“状态”来提供上下文信息。</p>
+<p>UNICORN的方法完全不同，基于图的表示和分析在检测APT攻击上具有良好的表现</p>
+<ul>
+<li><strong>基于图的异常检测</strong></li>
+<li><strong>基于Provenance的安全分析</strong></li>
+</ul>
+<p>有ProTracer、CamQuery、Holmes、SLUETH、Poirot、SAQL</p>
+<p>UNICORN不同于传统的基于规则的系统，它是一个不需要专家知识的异常检测系统。</p>
+<h1 id="9-总结"><a class="markdownIt-Anchor" href="#9-总结"></a> 9 总结</h1>
+<p>本文提出了UNICORN，这是一种实时异常检测系统，它利用整个whole-system data provenance来检测高级持续威胁。  UNICORN通过结构化的Provenance Graph，对系统行为进行建模，Provenance Graph揭示了系统对象之间的因果关系，并在其流到分析管道中时，对其进行有效地汇总来考虑整个图。 我们的评估表明，由此产生的演化模型，可以成功地检测出从不同审计系统捕获的各种APT攻击，包括真实的APT活动，且准确性高、误报率低。</p>
+<p>​</p>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Alston</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="/alst0n.site/2020/03/14/PaperNote-UNICORN%EF%BC%9A%E5%9F%BA%E4%BA%8EProvenance%E7%9A%84%E5%AE%9E%E6%97%B6APT%E6%A3%80%E6%B5%8B%E5%99%A8/">alst0n.site/2020/03/14/PaperNote-UNICORN%EF%BC%9A%E5%9F%BA%E4%BA%8EProvenance%E7%9A%84%E5%AE%9E%E6%97%B6APT%E6%A3%80%E6%B5%8B%E5%99%A8/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="alst0n.site">Alston's blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E7%A7%91%E7%A0%94/">科研</a><a class="post-meta__tags" href="/tags/APT/">APT</a><a class="post-meta__tags" href="/tags/%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B/">入侵检测</a></div><nav id="pagination"><div class="next-post pull-right"><a href="/2020/03/05/PaperNote-%E5%9F%BA%E4%BA%8E%E6%97%B6%E7%A9%BA%E7%89%B9%E5%BE%81%E8%9E%8D%E5%90%88%E7%9A%84%E5%85%A5%E4%BE%B5%E6%A3%80%E6%B5%8B%E7%B3%BB%E7%BB%9F%E6%A8%A1%E5%9E%8B/"><span>PaperNote-基于时空特征融合的入侵检测系统模型</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer class="footer-bg" style="background-image: url(https://s2.ax1x.com/2020/02/21/3uWnXD.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2020 By Alston</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script src="/js/search/local-search.js"></script><script id="ribbon" src="/js/third-party/canvas-ribbon.js" size="150" alpha="0.6" zIndex="-1" data-click="false"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>
