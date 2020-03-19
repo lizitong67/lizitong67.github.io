@@ -1,0 +1,521 @@
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="《网络安全态势感知》读书笔记"><meta name="keywords" content="读书,态势感知"><meta name="author" content="Alston"><meta name="copyright" content="Alston"><title>《网络安全态势感知》读书笔记 | Alston's blog</title><link rel="shortcut icon" href="/1231489.png"><link rel="stylesheet" href="/css/index.css?version=1.7.0"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.7.0"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script src="https://v1.hitokoto.cn/?encode=js&amp;charset=utf-8&amp;select=.footer_custom_text" defer></script><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"找不到您查询的内容:${query}"}},
+  copy: {
+    success: '复制成功',
+    error: '复制错误',
+    noSupport: '浏览器不支持'
+  }
+} </script><meta name="generator" content="Hexo 4.2.0"></head><body><canvas class="fireworks"></canvas><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="切换文章详情">切换站点概览</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">目录</div><div class="sidebar-toc__progress"><span class="progress-notice">你已经读了</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#i-基础知识"><span class="toc-text"> Ⅰ 基础知识</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#1-开启网络安全态势感知的旅程"><span class="toc-text"> 1 开启网络安全态势感知的旅程</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#2-大数据平台和技术"><span class="toc-text"> 2 大数据平台和技术</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#21-大数据基础"><span class="toc-text"> 2.1 大数据基础</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#211-大数据关键技术"><span class="toc-text"> 2.1.1 大数据关键技术</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#212-大数据计算模式"><span class="toc-text"> 2.1.2 大数据计算模式</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#22-大数据主流平台框架"><span class="toc-text"> 2.2 大数据主流平台框架</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#221-hadoop"><span class="toc-text"> 2.2.1 Hadoop</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#222-spark"><span class="toc-text"> 2.2.2 Spark</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#223-storm"><span class="toc-text"> 2.2.3 Storm</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#23-网络安全态势感知架构"><span class="toc-text"> 2.3 网络安全态势感知架构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#24-大数据采集与预处理技术"><span class="toc-text"> 2.4 大数据采集与预处理技术</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#25-大数据存储与管理技术"><span class="toc-text"> 2.5 大数据存储与管理技术</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#26-大数据处理与分析技术"><span class="toc-text"> 2.6 大数据处理与分析技术</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#27-大数据可视化技术"><span class="toc-text"> 2.7 大数据可视化技术</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#ii-态势提取"><span class="toc-text"> Ⅱ 态势提取</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#3-网络安全数据范围"><span class="toc-text"> 3 网络安全数据范围</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#31-完整内容数据"><span class="toc-text"> 3.1 完整内容数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#32-提取内容数据"><span class="toc-text"> 3.2 提取内容数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#33-会话数据"><span class="toc-text"> 3.3 会话数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#34-统计数据"><span class="toc-text"> 3.4 统计数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#35-元数据"><span class="toc-text"> 3.5 元数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#36-日志数据"><span class="toc-text"> 3.6 日志数据</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#37-告警数据"><span class="toc-text"> 3.7 告警数据</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#4-网络安全数据采集"><span class="toc-text"> 4 网络安全数据采集</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#41-制定数据采集计划"><span class="toc-text"> 4.1 制定数据采集计划</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#42-主动式采集"><span class="toc-text"> 4.2 主动式采集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#43-被动式采集"><span class="toc-text"> 4.3 被动式采集</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#44-数据采集工具"><span class="toc-text"> 4.4 数据采集工具</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#45-采集点部署"><span class="toc-text"> 4.5 采集点部署</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#5-网络安全数据预处理"><span class="toc-text"> 5 网络安全数据预处理</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#51-数据清洗"><span class="toc-text"> 5.1 数据清洗</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#52-数据集成"><span class="toc-text"> 5.2 数据集成</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#53-数据归约"><span class="toc-text"> 5.3 数据归约</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#54-数据变换"><span class="toc-text"> 5.4 数据变换</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#55-数据融合"><span class="toc-text"> 5.5 数据融合</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iii-态势提取"><span class="toc-text"> Ⅲ 态势提取</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#6-网络安全检测与分析"><span class="toc-text"> 6 网络安全检测与分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#61-入侵检测"><span class="toc-text"> 6.1 入侵检测</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#611-ids分类"><span class="toc-text"> 6.1.1 IDS分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#612-入侵检测的分析方法"><span class="toc-text"> 6.1.2 入侵检测的分析方法</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#62-入侵防御"><span class="toc-text"> 6.2 入侵防御</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#621-ips分类"><span class="toc-text"> 6.2.1 IPS分类</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#63-入侵容忍"><span class="toc-text"> 6.3 入侵容忍</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#64-安全分析"><span class="toc-text"> 6.4 安全分析</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#641-安全分析流程"><span class="toc-text"> 6.4.1 安全分析流程</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#642-数据包分析"><span class="toc-text"> 6.4.2 数据包分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#643-计算机网络取证"><span class="toc-text"> 6.4.3 计算机&#x2F;网络取证</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#644-恶意软件分析"><span class="toc-text"> 6.4.4 恶意软件分析</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#7-网络安全态势指标构建"><span class="toc-text"> 7 网络安全态势指标构建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#71-态势属性指标的分类"><span class="toc-text"> 7.1 态势属性指标的分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#72-不同维度的态势指标"><span class="toc-text"> 7.2 不同维度的态势指标</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#73-指标的标准化处理"><span class="toc-text"> 7.3 指标的标准化处理</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#8-网络安全态势评估"><span class="toc-text"> 8 网络安全态势评估</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#82-态势评估方法分类"><span class="toc-text"> 8.2 态势评估方法分类</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#83-态势评估常用的融合方法"><span class="toc-text"> 8.3 态势评估常用的融合方法</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#9-网络安全态势可视化"><span class="toc-text"> 9 网络安全态势可视化</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#91-数据可视化"><span class="toc-text"> 9.1 数据可视化</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#92-网络安全态势可视化"><span class="toc-text"> 9.2 网络安全态势可视化</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#iv-态势预测"><span class="toc-text"> Ⅳ 态势预测</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#10-态势预测"><span class="toc-text"> 10 态势预测</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#101-典型预测"><span class="toc-text"> 10.1 典型预测</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#102-智能预测"><span class="toc-text"> 10.2 智能预测</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://pic4.zhimg.com/80/v2-1b0d0240350e3d8e0550845b6bdaad1e_hd.jpg"></div><div class="author-info__name text-center">Alston</div><div class="author-info__description text-center">计算机硕士在读</div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">文章</span><span class="pull-right">40</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">标签</span><span class="pull-right">16</span></a><a class="author-info-articles__categories article-meta" href="/categories"><span class="pull-left">分类</span><span class="pull-right">12</span></a></div><hr><div class="author-info-links"><div class="author-info-links__title text-center">Links</div><a class="author-info-links__name text-center" href="https://blog.csdn.net/Sc0fie1d" target="_blank" rel="noopener">Alston's CSDN</a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://s2.ax1x.com/2020/02/21/3uWnXD.jpg)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Alston's blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a><a class="site-page" href="/about">About</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> 搜索</span></a></span></div><div id="post-info"><div id="post-title">《网络安全态势感知》读书笔记</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2020-03-19</time><span class="post-meta__separator">|</span><i class="fa fa-inbox post-meta__icon" aria-hidden="true"></i><a class="post-meta__categories" href="/categories/%E8%AF%BB%E4%B9%A6/">读书</a><div class="post-meta-wordcount"><span>字数总计: </span><span class="word-count">5.3k</span><span class="post-meta__separator">|</span><span>阅读时长: 16 分钟</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><p>本书涉及面较广，但是白话较多，没有太多的干货。寸之深，亩只阔，适合作为科普读物快速阅读。</p>
+<h1 id="i-基础知识"><a class="markdownIt-Anchor" href="#i-基础知识"></a> Ⅰ 基础知识</h1>
+<h1 id="1-开启网络安全态势感知的旅程"><a class="markdownIt-Anchor" href="#1-开启网络安全态势感知的旅程"></a> 1 开启网络安全态势感知的旅程</h1>
+<p>（1）网络安全态势感知本质上就是获取并理解大量网络安全数据，判断当前整体安全状态并预测短期未来趋势。总体而言可分为三个阶段：<kbd>态势提取、态势理解和态势预测</kbd>，三个部分同步并行，相互触发连续的变化，不断更新和往复循环。</p>
+<p>（2）防火墙的实质：根据包的起点和终点来判断是否允许其通过</p>
+<p>（3）IDS分类：</p>
+<ul>
+<li>根据信息来源不同分为：基于主机、基于网络和分布式IDS</li>
+<li>根据检测方法和安全策略，分为：
+<ul>
+<li>异常入侵检测：建立正常行为模型，漏报低，误报高</li>
+<li>误用入侵检测：建立不可接受的行为模型，漏报高，误报低</li>
+</ul>
+</li>
+</ul>
+<p>（4）获取较低抽象层次的网络安全态势的方法：入侵检测与告警关联、使用攻击图进行漏洞分析、因果关联分析、取证分析（入侵的反向追踪）、信息流分析、攻击趋势分析和入侵响应。</p>
+<p>（5）JDL的数据融合模型、Bass的功能模型</p>
+<p>（6）<strong>数据融合</strong>是网络安全态势理解的核心</p>
+<p>（7）当前的网络安全态势预测方法：神经网络、时间序列预测法、SVM、基于因果的数据模型、模式识别</p>
+<p>（8）目标：降低MTTD/MTTR（平均检测时间/平均响应时间）</p>
+<h1 id="2-大数据平台和技术"><a class="markdownIt-Anchor" href="#2-大数据平台和技术"></a> 2 大数据平台和技术</h1>
+<ul>
+<li>大数据特点：Volume（大量）、Velocity（高速）、Variety（多样）、Value（低价值密度）</li>
+</ul>
+<h2 id="21-大数据基础"><a class="markdownIt-Anchor" href="#21-大数据基础"></a> 2.1 大数据基础</h2>
+<h3 id="211-大数据关键技术"><a class="markdownIt-Anchor" href="#211-大数据关键技术"></a> 2.1.1 大数据关键技术</h3>
+<ul>
+<li>数据采集与预处理</li>
+<li>数据存储与管理</li>
+<li>数据处理与分析</li>
+<li>数据可视化呈现</li>
+</ul>
+<h3 id="212-大数据计算模式"><a class="markdownIt-Anchor" href="#212-大数据计算模式"></a> 2.1.2 大数据计算模式</h3>
+<ul>
+<li>批处理计算：传统的计算方式，如MapReduce、Spark</li>
+<li>流式计算：实时处理多源、连续到达的流式数据</li>
+<li>交互式查询计算：用于对超大规模数据的存储管理和查询分析</li>
+<li>图计算：以“图论”为基础，用于对大规模图结构数据的处理</li>
+</ul>
+<h2 id="22-大数据主流平台框架"><a class="markdownIt-Anchor" href="#22-大数据主流平台框架"></a> 2.2 大数据主流平台框架</h2>
+<h3 id="221-hadoop"><a class="markdownIt-Anchor" href="#221-hadoop"></a> 2.2.1 Hadoop</h3>
+<p><img src="https://img-blog.csdnimg.cn/20200319153807119.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<ul>
+<li>采用Java开发的开源分布式计算平台，<strong>用大量廉价计算机集群进行分布式存储计算</strong>，具有良好的跨平台性，<strong>主要用于批处理计算</strong>。</li>
+<li>优点：高可靠性、高效性、低成本、可扩展性、支持多种编程语言</li>
+<li>缺点：计算过程放在硬盘上，速度不如使用内存快</li>
+<li>采用MapReduce计算模型</li>
+</ul>
+<h3 id="222-spark"><a class="markdownIt-Anchor" href="#222-spark"></a> 2.2.2 Spark</h3>
+<ul>
+<li>Scala语言编写，提供了<strong>内存计算</strong>，用于对大规模数据的<strong>快速处理</strong></li>
+<li>兼容Hadoop</li>
+<li>优点：速度快、<strong>通用性（支持4种计算模式）</strong>、易用性、运行模式多样</li>
+</ul>
+<h3 id="223-storm"><a class="markdownIt-Anchor" href="#223-storm"></a> 2.2.3 Storm</h3>
+<ul>
+<li>主要用于<strong>实时的流式数据处理</strong></li>
+<li>优点：整合性（可以方便地和消息队列系统、数据库进行整合）、可扩展性、简易的API、可靠的消息处理、容错性、支持多种编程语言</li>
+</ul>
+<p>由于安全场景<strong>复杂批量数据处理</strong>和<strong>基于历史数据</strong>的交互式查询以及数据挖掘，对<strong>实时流式数据</strong>处理也有一部分需求，因此适合使用<strong>Hadoop+Spark</strong>相结合的建设模式。</p>
+<h2 id="23-网络安全态势感知架构"><a class="markdownIt-Anchor" href="#23-网络安全态势感知架构"></a> 2.3 网络安全态势感知架构</h2>
+<p><img src="https://img-blog.csdnimg.cn/20200319153823678.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<h2 id="24-大数据采集与预处理技术"><a class="markdownIt-Anchor" href="#24-大数据采集与预处理技术"></a> 2.4 大数据采集与预处理技术</h2>
+<p>（1）数据分类</p>
+<ul>
+<li>按照形态分类分类：结构化数据和非结构化数据</li>
+<li>按照应用场景计算需求分类：静态数据和动态数据（流式数据，随时间而无限增长）</li>
+<li>按照来源和特点分类：环境业务类数据、网络层面数据、主机层面日志数据、告警数据</li>
+</ul>
+<p>（2）数据采集方法：</p>
+<ul>
+<li>传感器：  软件或硬件“探针”</li>
+<li>网络爬虫</li>
+<li>日志收集系统：Flume</li>
+<li>数据抽取工具：将存储在数据库中的结构化数据抽取到Hadoop中；Sqoop</li>
+<li>分布式<strong>消息队列</strong>系统：在消息传输过程中保存消息的容器或中间件，提供消息路由、数据分发和可靠传递；<kbd>Kafka</kbd></li>
+</ul>
+<h2 id="25-大数据存储与管理技术"><a class="markdownIt-Anchor" href="#25-大数据存储与管理技术"></a> 2.5 大数据存储与管理技术</h2>
+<ul>
+<li>分布式文件系统 ：GFS、HDFS</li>
+<li>分布式数据库：HBase</li>
+<li>分布式协调系统：主要用来解决分布式环境当中多个进程之间的相互控制；使用分布式锁；ZooKeeper</li>
+<li>非关系型数据库：NoSQL</li>
+<li>资源管理调度： YARN、Mesos</li>
+</ul>
+<h2 id="26-大数据处理与分析技术"><a class="markdownIt-Anchor" href="#26-大数据处理与分析技术"></a> 2.6 大数据处理与分析技术</h2>
+<ul>
+<li>批量数据处理：MapReduce</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20200319153834690.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<ul>
+<li>
+<p>交互式数据分析：Hive</p>
+</li>
+<li>
+<p>流式计算：Storm、Spark Streaming；前者实时程度高，后者采用小批量处理方式可以兼顾批量和实时处理</p>
+</li>
+<li>
+<p>图计算：Pregel</p>
+</li>
+<li>
+<p>高级数据查询语言Pig：一种脚本语言，会自动把用户编写的脚本转换成MapReduce作业并在Hadoop运行</p>
+</li>
+</ul>
+<h2 id="27-大数据可视化技术"><a class="markdownIt-Anchor" href="#27-大数据可视化技术"></a> 2.7 大数据可视化技术</h2>
+<p>（1）工具</p>
+<ul>
+<li>R</li>
+<li>Weka</li>
+<li>Gephi</li>
+</ul>
+<h1 id="ii-态势提取"><a class="markdownIt-Anchor" href="#ii-态势提取"></a> Ⅱ 态势提取</h1>
+<h1 id="3-网络安全数据范围"><a class="markdownIt-Anchor" href="#3-网络安全数据范围"></a> 3 网络安全数据范围</h1>
+<h2 id="31-完整内容数据"><a class="markdownIt-Anchor" href="#31-完整内容数据"></a> 3.1 完整内容数据</h2>
+<ul>
+<li>主要是指包捕获数据；Wireshark</li>
+</ul>
+<p>数据包分析：</p>
+<ul>
+<li>包过滤</li>
+<li>模式匹配</li>
+<li>协议字段分析</li>
+</ul>
+<h2 id="32-提取内容数据"><a class="markdownIt-Anchor" href="#32-提取内容数据"></a> 3.2 提取内容数据</h2>
+<ul>
+<li>包字符串数据：例如我们可以提取HTTP数据包的报头或者有效载荷</li>
+</ul>
+<h2 id="33-会话数据"><a class="markdownIt-Anchor" href="#33-会话数据"></a> 3.3 会话数据</h2>
+<p>会话数据是两个网络设备之间通信行为的汇总，也称为数据流。其定义是一系列通过网络中某一观察点的具有相同属性的数据包，这些属性包括：会话的起点和重点、会话为单向或双向、数据包发送的起止时间、协议层次等。</p>
+<ul>
+<li>会话数据常见的标准是五元数据组：源IP、源端口、目的IP、目的端口、传输协议。</li>
+<li>常见类型：NetFlow、IPFIX</li>
+</ul>
+<h2 id="34-统计数据"><a class="markdownIt-Anchor" href="#34-统计数据"></a> 3.4 统计数据</h2>
+<p>对其他数据类型的组织、分析、解释和演示。</p>
+<h2 id="35-元数据"><a class="markdownIt-Anchor" href="#35-元数据"></a> 3.5 元数据</h2>
+<p>元数据（Metadata）是<strong>用于描述数据的数据</strong>，主要是描述数据属性的信息，如数据的组织、数据域及其关系。</p>
+<ul>
+<li>为了获取元数据，我们从网络环境中提取关键元素，然后利用外部工具来理解他们。如我们想知道在数据包中的源和目的IP是谁在管理，如何组织起来的，那么我们就可以使用WHOIS数据库进行查询，获得元数据。</li>
+</ul>
+<h2 id="36-日志数据"><a class="markdownIt-Anchor" href="#36-日志数据"></a> 3.6 日志数据</h2>
+<p>非常重要和有价值的网络安全数据类型，特别是当其被存储在一个中央服务器上并且有多个日志来源相关联的时候。日志数据记录着特定的事件、特定系统和环境的状态。</p>
+<ul>
+<li>主要包括：Web代理日志、防火墙日志、VPN身份验证日志、Windows安全日志、SysLog数据等</li>
+<li>根据来源分类：物理设备日志（IOT）、网络设备日志、操作系统日志、应用程序日志</li>
+<li>根绝记录架构分类：本地日志、远程分散日志、集中管理日志</li>
+</ul>
+<h2 id="37-告警数据"><a class="markdownIt-Anchor" href="#37-告警数据"></a> 3.7 告警数据</h2>
+<ul>
+<li>入侵检测系统是告警数据的重要来源</li>
+</ul>
+<h1 id="4-网络安全数据采集"><a class="markdownIt-Anchor" href="#4-网络安全数据采集"></a> 4 网络安全数据采集</h1>
+<h2 id="41-制定数据采集计划"><a class="markdownIt-Anchor" href="#41-制定数据采集计划"></a> 4.1 制定数据采集计划</h2>
+<p>四个阶段：</p>
+<ul>
+<li>定义威胁：STRIDE威胁建模、攻击树、攻击库等</li>
+<li>量化风险：风险评估，即面临的风险、存在的弱点、造成的影响。常用“影响”和“概率”的乘积来求得影响值。“影响”表示威胁对组织造成的影响，可以分级度量；“概率”表示威胁发生的可能性。</li>
+<li>识别数据源</li>
+<li>提炼有价值元素</li>
+</ul>
+<h2 id="42-主动式采集"><a class="markdownIt-Anchor" href="#42-主动式采集"></a> 4.2 主动式采集</h2>
+<p>也称为交互式采集，是指通过与网络上工作的主机进行交互操作的方式来采集网络数据。</p>
+<ul>
+<li>SNMP</li>
+<li>Telnet</li>
+<li>SSH</li>
+<li>WMI（Windows Management Instrumentation，Windows管理规范）</li>
+<li>文件传输协议：FTP、SFTP、TFTP、HTTP、HTTPS</li>
+<li>JDBC/ODBC采集数据库信息：为多种数据库提供统一访问</li>
+<li>代理和插件</li>
+<li>漏洞、端口扫描</li>
+<li>蜜罐和蜜网</li>
+<li>爬虫和传感器</li>
+</ul>
+<h2 id="43-被动式采集"><a class="markdownIt-Anchor" href="#43-被动式采集"></a> 4.3 被动式采集</h2>
+<p>是指在网络上采集数据时，不发出第二层或更高层的数据。</p>
+<ul>
+<li>有线和无线：监听网线、无线电波数据</li>
+<li>集线器和交换机：集线器的广播特性、交换机端口镜像将某几个端口的流量复制到其它端口上</li>
+<li>Syslog：广泛应用于Unix类的网络设备中</li>
+<li>SNMP Trap：SNMP代理主动发送数据</li>
+<li>NetFlow、IPFIX、sFlow：会话、数据流交换技术</li>
+<li>WebService、MQ（消息队列）</li>
+<li>DPI、DFI：深度包、流检测</li>
+</ul>
+<h2 id="44-数据采集工具"><a class="markdownIt-Anchor" href="#44-数据采集工具"></a> 4.4 数据采集工具</h2>
+<p><img src="https://img-blog.csdnimg.cn/2020031915385511.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /><br />
+<img src="https://img-blog.csdnimg.cn/20200319153907378.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<h2 id="45-采集点部署"><a class="markdownIt-Anchor" href="#45-采集点部署"></a> 4.5 采集点部署</h2>
+<p>需要考虑的因素：降低数据冗余、时间同步、采集覆盖面要兼顾边界和内部网络、衡量采集成本的收益、考虑存储空间</p>
+<ul>
+<li>关注网络出入口点</li>
+<li>掌握IP地址分布</li>
+<li>靠近关键资产</li>
+<li>创建采集全景视图</li>
+</ul>
+<h1 id="5-网络安全数据预处理"><a class="markdownIt-Anchor" href="#5-网络安全数据预处理"></a> 5 网络安全数据预处理</h1>
+<p>数据预处理的主要内容包括：</p>
+<ul>
+<li>数据审核：审核准确性、适用性、及时性、一致性</li>
+<li>数据筛选</li>
+<li>数据排序</li>
+</ul>
+<p>主要方法包括以下几种：</p>
+<h2 id="51-数据清洗"><a class="markdownIt-Anchor" href="#51-数据清洗"></a> 5.1 数据清洗</h2>
+<p>即去除源数据集中的噪声和无关数据，处理遗漏数据和清洗脏数据，除去空白数据域，通过填写缺失的值光滑噪声数据，识别或删除离群点并解决不一致性</p>
+<ul>
+<li>不完整数据：感兴趣的属性没有值。可采用如下方法：
+<ul>
+<li>人工填充、忽略元组、用全局常量填充、用属性中间值填充、用相似样本的中间值填充、<strong>用最可能的值填充</strong></li>
+</ul>
+</li>
+<li>不一致数据：数据内涵出现不一致、矛盾和不相容等情况。往往是由于重复存放的数据没有进行一致性更新。用<strong>数据集成</strong>进行处理</li>
+<li><strong>噪声数据</strong>：存在错误或异常的数据。去除噪声的常用方法：
+<ul>
+<li>分箱（Binning）：通过将有序的数据划分到对应的箱子里，减少数据规模，从而光滑数据</li>
+<li>回归（Regression）</li>
+<li>聚类（Clustering）</li>
+</ul>
+</li>
+<li>数据清晰过程：偏差检测、数据规整</li>
+</ul>
+<h2 id="52-数据集成"><a class="markdownIt-Anchor" href="#52-数据集成"></a> 5.2 数据集成</h2>
+<p>为了减少数据的不一致性和冗余，需要对数据进行集成，也就是对来自多个数据存储的数据进行合并处理、解决语义模糊性的过程，从而提供全面的数据共享。</p>
+<p>数据集成的方法模式：</p>
+<ul>
+<li>联邦模式</li>
+<li><strong>中间件模式</strong></li>
+<li>数据仓库模式</li>
+</ul>
+<h2 id="53-数据归约"><a class="markdownIt-Anchor" href="#53-数据归约"></a> 5.3 数据归约</h2>
+<p>尽可能保持数据原貌的前提下，最大限度地精简数据，属于数据融合的范畴，其大致过程为：按照数据的来源、类别、属性、时间等进行融合，形成来源明确、类别统一、属性一致、时间有序的源数据。</p>
+<p>常用规约策略：</p>
+<ul>
+<li>特征规约：减少特征向量的维度</li>
+<li>维规约：把原始数据变换或投影到较小的空间。包括小波变换、主成分分析。</li>
+<li><strong>样本规约</strong>：从完整的数据集中选出一个有代表性的样本的子集。</li>
+<li>数量规约：是离散化技术的一种，将具有连续型特征的值离散化，使之成为少量的区间，每个区映射到一个离散符号。
+<ul>
+<li>有参数量规约：回归、对数-线性模型</li>
+<li>无参数量规约：直方图、据类、抽样、数据立方体聚集</li>
+</ul>
+</li>
+<li>数据压缩</li>
+</ul>
+<h2 id="54-数据变换"><a class="markdownIt-Anchor" href="#54-数据变换"></a> 5.4 数据变换</h2>
+<p>将数据转换或统一成适合于进行分析的形式。</p>
+<p>常见的数据变换策略：</p>
+<ul>
+<li>光滑：降噪</li>
+<li>属性（特征构造）：构造新特征</li>
+<li>聚合：对数据进行汇总和集中</li>
+<li>标准化</li>
+<li>离散化：将数值属性的原始值用区间标签或概念标签替换，这些标签可以递归地组织成更高层概念，导致数值属性的概念分层，对于同一个属性可以定义多个概念分层。</li>
+<li>概念分层</li>
+</ul>
+<p>数据变换方法：</p>
+<ul>
+<li>分箱方法</li>
+<li>直方图分析法</li>
+<li>聚类、决策树</li>
+<li>标准化</li>
+<li>概念分层</li>
+</ul>
+<h2 id="55-数据融合"><a class="markdownIt-Anchor" href="#55-数据融合"></a> 5.5 数据融合</h2>
+<p><strong>数据融合是态势感知的基础。</strong></p>
+<p>按照数据抽象程度分类：</p>
+<ul>
+<li>数据级融合</li>
+<li>特征级融合</li>
+<li>决策级融合</li>
+</ul>
+<p>数据融合相关算法：</p>
+<ul>
+<li>经典方法：加权平均法、卡尔曼滤波法、贝叶斯推理、D-S证据理论</li>
+<li>现代方法：聚类、粗糙集理论、模板法、模糊理论、人工神经网络、专家系统</li>
+</ul>
+<p><img src="https://img-blog.csdnimg.cn/20200319153928716.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /><br />
+<img src="https://img-blog.csdnimg.cn/20200319153939222.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<h1 id="iii-态势提取"><a class="markdownIt-Anchor" href="#iii-态势提取"></a> Ⅲ 态势提取</h1>
+<h1 id="6-网络安全检测与分析"><a class="markdownIt-Anchor" href="#6-网络安全检测与分析"></a> 6 网络安全检测与分析</h1>
+<h2 id="61-入侵检测"><a class="markdownIt-Anchor" href="#61-入侵检测"></a> 6.1 入侵检测</h2>
+<ul>
+<li>入侵检测通用模型：CIDF（DRAPA），由事件产生器、事件分析器、响应单元、事件数据库</li>
+</ul>
+<h3 id="611-ids分类"><a class="markdownIt-Anchor" href="#611-ids分类"></a> 6.1.1 IDS分类</h3>
+<ul>
+<li>
+<p>根据检测所用数据的来源不同：</p>
+<ul>
+<li>
+<p>基于主机</p>
+</li>
+<li>
+<p>基于网络</p>
+</li>
+<li>
+<p>基于混合数据源（分布式）</p>
+</li>
+</ul>
+</li>
+<li>
+<p>根据检测分析方法不同：</p>
+<ul>
+<li>
+<p>误用检测：基于知识</p>
+</li>
+<li>
+<p>异常检测：基于行为</p>
+</li>
+<li>
+<p>误用和异常混合</p>
+</li>
+</ul>
+</li>
+<li>
+<p>根据工作方式不同：</p>
+<ul>
+<li>实时</li>
+<li>非实时</li>
+<li>实际面对大流量时，单纯的实时检测不太现实，往往采用混合方式：首先实时进行初步分析，然后离线分析产生的告警。</li>
+</ul>
+</li>
+<li>
+<p>根据体系结构不同：</p>
+<ul>
+<li>
+<p>集中式</p>
+</li>
+<li>
+<p>分布式</p>
+</li>
+</ul>
+</li>
+<li>
+<p>根据相应方式不同：</p>
+<ul>
+<li>被动响应</li>
+<li>主动响应</li>
+</ul>
+</li>
+</ul>
+<h3 id="612-入侵检测的分析方法"><a class="markdownIt-Anchor" href="#612-入侵检测的分析方法"></a> 6.1.2 入侵检测的分析方法</h3>
+<ul>
+<li>误用检测</li>
+<li>异常检测</li>
+<li>协议分析</li>
+</ul>
+<p>分布式结构是趋势，可以更好地利用更先进的入侵检测算法，如免疫系统算法。</p>
+<p>随着安全的普及，入侵检测可以打包成服务卖给家庭网络。</p>
+<h2 id="62-入侵防御"><a class="markdownIt-Anchor" href="#62-入侵防御"></a> 6.2 入侵防御</h2>
+<p>IPS可以提供主动防护，通过直接嵌入到网络流量中（串行部署），通过一个网络端口接收来自外部系统的流量，经过检查确认其中不包含异常活动或可疑内容之后，再通过另外一个端口将它传送到内部系统中。</p>
+<p>IPS可以检测到2-7层的攻击，而传统防火墙只能对3、4层进行检查。</p>
+<h3 id="621-ips分类"><a class="markdownIt-Anchor" href="#621-ips分类"></a> 6.2.1 IPS分类</h3>
+<ul>
+<li>基于主机</li>
+<li>基于网络</li>
+</ul>
+<h2 id="63-入侵容忍"><a class="markdownIt-Anchor" href="#63-入侵容忍"></a> 6.3 入侵容忍</h2>
+<p>入侵容忍的目的在于，再系统被部分入侵，性能下降的情况下，还能维持系统的正常服务。</p>
+<p>实现途径：</p>
+<ul>
+<li>攻击响应：检测到局部系统遭受攻击之后，加快反应时间，调整系统结构，重新分配资源</li>
+<li>攻击遮蔽：使用容错技术，使系统感觉不到小范围的攻击</li>
+</ul>
+<p>按照保护对象的不同：</p>
+<ul>
+<li>面向服务</li>
+<li>面向数据</li>
+</ul>
+<p>按照功能需求不同：</p>
+<ul>
+<li>预防与检测</li>
+<li>恢复与重构</li>
+</ul>
+<p>根据实现方法不同：</p>
+<ul>
+<li>基于冗余与适应性：如拜占庭法则系统</li>
+<li>基于门限密钥共享体制</li>
+<li>基于系统配置</li>
+</ul>
+<h2 id="64-安全分析"><a class="markdownIt-Anchor" href="#64-安全分析"></a> 6.4 安全分析</h2>
+<h3 id="641-安全分析流程"><a class="markdownIt-Anchor" href="#641-安全分析流程"></a> 6.4.1 安全分析流程</h3>
+<p>输入告警、安全分析、输出结论（事件是否发生）。常见方法如下：</p>
+<ul>
+<li>关联调查：适合多主机场景</li>
+<li>鉴别诊断</li>
+</ul>
+<h3 id="642-数据包分析"><a class="markdownIt-Anchor" href="#642-数据包分析"></a> 6.4.2 数据包分析</h3>
+<ul>
+<li>
+<p>协议分析：检验协议数据结构中的各个字段，常用于研究协议规范或者进行网络安全数据调查。</p>
+</li>
+<li>
+<p>包分析：模式匹配、协议字段分析、包过滤</p>
+</li>
+<li>
+<p>流分析：对一组相关的数据包序列进行分析</p>
+<h3 id="643-计算机网络取证"><a class="markdownIt-Anchor" href="#643-计算机网络取证"></a> 6.4.3 计算机/网络取证</h3>
+</li>
+</ul>
+<h3 id="644-恶意软件分析"><a class="markdownIt-Anchor" href="#644-恶意软件分析"></a> 6.4.4 恶意软件分析</h3>
+<p>编写检测特征码用于检测恶意软件的感染范围。</p>
+<ul>
+<li>静态分析</li>
+<li>动态分析</li>
+</ul>
+<h1 id="7-网络安全态势指标构建"><a class="markdownIt-Anchor" href="#7-网络安全态势指标构建"></a> 7 网络安全态势指标构建</h1>
+<h2 id="71-态势属性指标的分类"><a class="markdownIt-Anchor" href="#71-态势属性指标的分类"></a> 7.1 态势属性指标的分类</h2>
+<ul>
+<li>定性指标与定量指标</li>
+<li>总体指标和分类指标</li>
+<li>描述性指标和分析性指标</li>
+<li>效益型指标和成本型指标</li>
+</ul>
+<h2 id="72-不同维度的态势指标"><a class="markdownIt-Anchor" href="#72-不同维度的态势指标"></a> 7.2 不同维度的态势指标</h2>
+<ul>
+<li>基础运行维</li>
+<li>脆弱维</li>
+<li>风险维</li>
+<li>威胁维</li>
+</ul>
+<h2 id="73-指标的标准化处理"><a class="markdownIt-Anchor" href="#73-指标的标准化处理"></a> 7.3 指标的标准化处理</h2>
+<ul>
+<li>定量指标标准化：数学变换</li>
+<li>定性指标标准化：量化后处理</li>
+</ul>
+<h1 id="8-网络安全态势评估"><a class="markdownIt-Anchor" href="#8-网络安全态势评估"></a> 8 网络安全态势评估</h1>
+<p>通过汇总、过滤、关联分析安全事件，在安全指标的基础上建立合适的数学模型，对网络系统整体安全程度进行评估。</p>
+<p><strong>态势理解的核心是态势评估；态势评估的核心是数据融合</strong>。</p>
+<p>态势指标权重的确定：</p>
+<ul>
+<li>排序归一法</li>
+<li><strong>层次分析法</strong></li>
+</ul>
+<h2 id="82-态势评估方法分类"><a class="markdownIt-Anchor" href="#82-态势评估方法分类"></a> 8.2 态势评估方法分类</h2>
+<p><img src="https://img-blog.csdnimg.cn/20200319153957969.jpg?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L1NjMGZpZTFk,size_16,color_FFFFFF,t_70" alt="" /></p>
+<h2 id="83-态势评估常用的融合方法"><a class="markdownIt-Anchor" href="#83-态势评估常用的融合方法"></a> 8.3 态势评估常用的融合方法</h2>
+<ul>
+<li>基于逻辑关系：告警关联</li>
+<li>基于数学模型：加权平均法、层次分析法、模糊综合评价方法、集对分析法</li>
+<li>基于概率统计：贝叶斯网络（需要较多先验知识、语义性）、隐马尔科夫模型</li>
+<li>基于规则推理：基于模糊理论的逻辑推理、基于D-S证据理论的概率推理</li>
+</ul>
+<h1 id="9-网络安全态势可视化"><a class="markdownIt-Anchor" href="#9-网络安全态势可视化"></a> 9 网络安全态势可视化</h1>
+<p>将过去、现在以及未来串联成一个含有上下文的故事，而这个故事必须具备真实性和关联性两个属性。</p>
+<h2 id="91-数据可视化"><a class="markdownIt-Anchor" href="#91-数据可视化"></a> 9.1 数据可视化</h2>
+<p>核心要素：数据的表示与变换、数据的可视化呈现、数据交互</p>
+<h1 id="92-网络安全态势可视化"><a class="markdownIt-Anchor" href="#92-网络安全态势可视化"></a> 9.2 网络安全态势可视化</h1>
+<ul>
+<li>层次化数据</li>
+<li>网络数据（图）</li>
+<li>可视化系统交互</li>
+<li>安全仪表盘</li>
+</ul>
+<h1 id="iv-态势预测"><a class="markdownIt-Anchor" href="#iv-态势预测"></a> Ⅳ 态势预测</h1>
+<h1 id="10-态势预测"><a class="markdownIt-Anchor" href="#10-态势预测"></a> 10 态势预测</h1>
+<h2 id="101-典型预测"><a class="markdownIt-Anchor" href="#101-典型预测"></a> 10.1 典型预测</h2>
+<ul>
+<li>灰色理论预测</li>
+<li>时间序列预测</li>
+<li>回归分析预测：属于因果关系分析</li>
+</ul>
+<h2 id="102-智能预测"><a class="markdownIt-Anchor" href="#102-智能预测"></a> 10.2 智能预测</h2>
+<ul>
+<li>神经网络</li>
+<li>SVM</li>
+<li>人工免疫预测：全局优化、收敛速度快
+<ul>
+<li>模型机理：记忆学习、反馈机理、克隆选择机理、多样性遗传机理</li>
+<li>相关算法：否定选择算法、克隆选择算法、免疫网络算法</li>
+</ul>
+</li>
+</ul>
+<p><strong>对于复合式攻击的预测：</strong></p>
+<ul>
+<li>
+<p><strong>基于攻击行为因果关系</strong>：通过提前设定好的攻击步骤之间的前驱后继关系，根据已经检测出的攻击步骤，推测今后一段时间内该攻击者对该IP地址要继续实施的攻击步骤，以及最重要达到的目的</p>
+</li>
+<li>
+<p><strong>基于贝叶斯博弈理论</strong>：提前将告警信息之间的因果关系映射到贝叶斯网络中，建立基于贝叶斯博弈的复合式攻击预测模型，再根据告警信息识别攻击者的意图并预测攻击，然后根据攻击者已经实施的攻击行为，依照贝叶斯法则不断修正攻击行为节点上的概率值，最后以上述概率值为基础分析攻击者和防御者双方的收益，预测理性的攻击者在下一个博弈阶段选择攻击的概率和防御者在下一个防御阶段选择防御的概率。</p>
+</li>
+<li>
+<p><strong>基于CTPN</strong>：Colored Time Petri Net，在传统的着色Petri网中加入和逻辑时序，将时间阈值引入CPTN的变迁引发序列中</p>
+</li>
+<li>
+<p><strong>基于意图</strong>：Kill-Chain</p>
+</li>
+<li>
+<p>SVM</p>
+</li>
+<li>
+<p>人工免疫预测：全局优化、收敛速度快</p>
+<ul>
+<li>模型机理：记忆学习、反馈机理、克隆选择机理、多样性遗传机理</li>
+<li>相关算法：否定选择算法、克隆选择算法、免疫网络算法</li>
+</ul>
+</li>
+</ul>
+<p><strong>对于复合式攻击的预测：</strong></p>
+<ul>
+<li><strong>基于攻击行为因果关系</strong>：通过提前设定好的攻击步骤之间的前驱后继关系，根据已经检测出的攻击步骤，推测今后一段时间内该攻击者对该IP地址要继续实施的攻击步骤，以及最重要达到的目的</li>
+<li><strong>基于贝叶斯博弈理论</strong>：提前将告警信息之间的因果关系映射到贝叶斯网络中，建立基于贝叶斯博弈的复合式攻击预测模型，再根据告警信息识别攻击者的意图并预测攻击，然后根据攻击者已经实施的攻击行为，依照贝叶斯法则不断修正攻击行为节点上的概率值，最后以上述概率值为基础分析攻击者和防御者双方的收益，预测理性的攻击者在下一个博弈阶段选择攻击的概率和防御者在下一个防御阶段选择防御的概率。</li>
+<li><strong>基于CTPN</strong>：Colored Time Petri Net，在传统的着色Petri网中加入和逻辑时序，将时间阈值引入CPTN的变迁引发序列中</li>
+<li><strong>基于意图</strong>：Kill-Chain</li>
+</ul>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">文章作者: </span><span class="post-copyright-info"><a href="mailto:undefined">Alston</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">文章链接: </span><span class="post-copyright-info"><a href="/alst0n.site/2020/03/19/%E3%80%8A%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%80%81%E5%8A%BF%E6%84%9F%E7%9F%A5%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">alst0n.site/2020/03/19/%E3%80%8A%E7%BD%91%E7%BB%9C%E5%AE%89%E5%85%A8%E6%80%81%E5%8A%BF%E6%84%9F%E7%9F%A5%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">版权声明: </span><span class="post-copyright-info">本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" target="_blank" rel="noopener">CC BY-NC-SA 4.0</a> 许可协议。转载请注明来自 <a href="alst0n.site">Alston's blog</a>！</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/%E8%AF%BB%E4%B9%A6/">读书</a><a class="post-meta__tags" href="/tags/%E6%80%81%E5%8A%BF%E6%84%9F%E7%9F%A5/">态势感知</a></div><nav id="pagination"><div class="next-post pull-right"><a href="/2020/03/14/PaperNote-UNICORN%EF%BC%9A%E5%9F%BA%E4%BA%8EProvenance%E7%9A%84%E5%AE%9E%E6%97%B6APT%E6%A3%80%E6%B5%8B%E5%99%A8/"><span>PaperNote-UNICORN：基于Provenance的实时APT检测器</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer class="footer-bg" style="background-image: url(https://s2.ax1x.com/2020/02/21/3uWnXD.jpg)"><div class="layout" id="footer"><div class="copyright">&copy;2020 By Alston</div><div class="framework-info"><span>驱动 - </span><a href="http://hexo.io" target="_blank" rel="noopener"><span>Hexo</span></a><span class="footer-separator">|</span><span>主题 - </span><a href="https://github.com/Molunerfinn/hexo-theme-melody" target="_blank" rel="noopener"><span>Melody</span></a></div><div class="footer_custom_text">hitokoto</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.7.0"></script><script src="/js/fancybox.js?version=1.7.0"></script><script src="/js/sidebar.js?version=1.7.0"></script><script src="/js/copy.js?version=1.7.0"></script><script src="/js/fireworks.js?version=1.7.0"></script><script src="/js/transition.js?version=1.7.0"></script><script src="/js/scroll.js?version=1.7.0"></script><script src="/js/head.js?version=1.7.0"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script src="/js/search/local-search.js"></script><script id="ribbon" src="/js/third-party/canvas-ribbon.js" size="150" alpha="0.6" zIndex="-1" data-click="false"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">本地搜索</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="搜索文章"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>由</span> <a href="https://github.com/wzpan/hexo-generator-search" target="_blank" rel="noopener" style="color:#49B1F5;">hexo-generator-search</a>
+ <span>提供支持</span></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>
